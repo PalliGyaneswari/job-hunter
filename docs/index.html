@@ -526,11 +526,11 @@
         <!-- Stats -->
         <div class="stats animate-in" style="animation-delay: 0.1s">
             <div class="stat-card">
-                <div class="stat-card__number" id="stat-total">0</div>
+                <div class="stat-card__number" id="stat-total">5</div>
                 <div class="stat-card__label">Total Jobs</div>
             </div>
             <div class="stat-card">
-                <div class="stat-card__number" id="stat-new">0</div>
+                <div class="stat-card__number" id="stat-new">5</div>
                 <div class="stat-card__label">New Today</div>
             </div>
             <div class="stat-card">
@@ -538,7 +538,7 @@
                 <div class="stat-card__label">Full-time</div>
             </div>
             <div class="stat-card">
-                <div class="stat-card__number" id="stat-freelance">0</div>
+                <div class="stat-card__number" id="stat-freelance">5</div>
                 <div class="stat-card__label">Freelance / Remote</div>
             </div>
         </div>
@@ -551,7 +551,7 @@
             </div>
             <select class="filter-select" id="filter-platform">
                 <option value="">All Platforms</option>
-                
+                <option value="remotive">Remotive</option>
             </select>
             <select class="filter-select" id="filter-type">
                 <option value="">All Types</option>
@@ -562,7 +562,7 @@
 
         <!-- Results Count -->
         <div class="results-count animate-in" style="animation-delay: 0.25s">
-            <span id="results-text">Showing <strong>0</strong> jobs</span>
+            <span id="results-text">Showing <strong>5</strong> jobs</span>
         </div>
 
         <!-- Jobs Grid -->
@@ -580,7 +580,7 @@
         <!-- Footer -->
         <footer class="footer">
             <p class="footer__text">
-                Last updated: June 28, 2026 at 07:22 UTC · Powered by 
+                Last updated: June 28, 2026 at 07:47 UTC · Powered by 
                 <a href="https://github.com" target="_blank">GitHub Actions</a>
             </p>
         </footer>
@@ -588,11 +588,11 @@
 
     <script>
         // ─── Job Data ─────────────────────────────────────────────────
-        const ALL_JOBS = [];
+        const ALL_JOBS = [{"id": "05e05d27726043c4", "title": "Senior Independent AI Engineer / Architect", "company": "A.Team", "location": "Americas, Europe, Israel", "link": "https://remotive.com/remote-jobs/software-development/senior-independent-ai-engineer-architect-1919266", "platform": "remotive", "posted_date": "2026-06-16", "scraped_at": "2026-06-28T07:46:49.336932+00:00"}, {"id": "36facfd6c9486bb7", "title": "Frontend Developer", "company": "Quinncia Inc", "location": "Worldwide", "link": "https://remotive.com/remote-jobs/software-development/frontend-developer-2090991", "platform": "remotive", "posted_date": "2026-06-16", "scraped_at": "2026-06-28T07:46:49.336955+00:00"}, {"id": "3f27252385084bdc", "title": "Online Data Analyst Canada (French Language)", "company": "TELUS Digital", "location": "Canada", "link": "https://remotive.com/remote-jobs/all-others/online-data-analyst-canada-french-language-2090945", "platform": "remotive", "posted_date": "2026-06-04", "scraped_at": "2026-06-28T07:46:49.336976+00:00"}, {"id": "e48d96633045395b", "title": "Online Data Analyst United States Spanish speakers", "company": "TELUS Digital", "location": "USA", "link": "https://remotive.com/remote-jobs/all-others/online-data-analyst-united-states-spanish-speakers-2090946", "platform": "remotive", "posted_date": "2026-06-04", "scraped_at": "2026-06-28T07:46:49.336982+00:00"}, {"id": "e7dd7ce48677a480", "title": "Online Data Analyst Canada", "company": "TELUS Digital", "location": "Canada", "link": "https://remotive.com/remote-jobs/all-others/online-data-analyst-canada-2090944", "platform": "remotive", "posted_date": "2026-06-04", "scraped_at": "2026-06-28T07:46:49.336987+00:00"}];
 
         // Track which jobs are fulltime vs freelance
         const FULLTIME_IDS = new Set([]);
-        const FREELANCE_IDS = new Set([]);
+        const FREELANCE_IDS = new Set(["05e05d27726043c4", "36facfd6c9486bb7", "3f27252385084bdc", "e48d96633045395b", "e7dd7ce48677a480"]);
 
         // ─── DOM References ───────────────────────────────────────────
         const grid = document.getElementById('jobs-grid');

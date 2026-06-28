@@ -1,1 +1,52 @@
-[]
+[
+  {
+    "id": "05e05d27726043c4",
+    "title": "Senior Independent AI Engineer / Architect",
+    "company": "A.Team",
+    "location": "Americas, Europe, Israel",
+    "link": "https://remotive.com/remote-jobs/software-development/senior-independent-ai-engineer-architect-1919266",
+    "platform": "remotive",
+    "posted_date": "2026-06-16",
+    "scraped_at": "2026-06-28T07:46:49.336932+00:00"
+  },
+  {
+    "id": "36facfd6c9486bb7",
+    "title": "Frontend Developer",
+    "company": "Quinncia Inc",
+    "location": "Worldwide",
+    "link": "https://remotive.com/remote-jobs/software-development/frontend-developer-2090991",
+    "platform": "remotive",
+    "posted_date": "2026-06-16",
+    "scraped_at": "2026-06-28T07:46:49.336955+00:00"
+  },
+  {
+    "id": "3f27252385084bdc",
+    "title": "Online Data Analyst Canada (French Language)",
+    "company": "TELUS Digital",
+    "location": "Canada",
+    "link": "https://remotive.com/remote-jobs/all-others/online-data-analyst-canada-french-language-2090945",
+    "platform": "remotive",
+    "posted_date": "2026-06-04",
+    "scraped_at": "2026-06-28T07:46:49.336976+00:00"
+  },
+  {
+    "id": "e48d96633045395b",
+    "title": "Online Data Analyst United States Spanish speakers",
+    "company": "TELUS Digital",
+    "location": "USA",
+    "link": "https://remotive.com/remote-jobs/all-others/online-data-analyst-united-states-spanish-speakers-2090946",
+    "platform": "remotive",
+    "posted_date": "2026-06-04",
+    "scraped_at": "2026-06-28T07:46:49.336982+00:00"
+  },
+  {
+    "id": "e7dd7ce48677a480",
+    "title": "Online Data Analyst Canada",
+    "company": "TELUS Digital",
+    "location": "Canada",
+    "link": "https://remotive.com/remote-jobs/all-others/online-data-analyst-canada-2090944",
+    "platform": "remotive",
+    "posted_date": "2026-06-04",
+    "scraped_at": "2026-06-28T07:46:49.336987+00:00"
+  }
+]
