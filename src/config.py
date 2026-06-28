@@ -1,0 +1,116 @@
+"""
+Centralized configuration for the Job Hunter pipeline.
+All target roles, locations, user-agents, and platform settings live here.
+"""
+
+import random
+
+# ─── Target Roles ────────────────────────────────────────────────────────────
+TARGET_ROLES = [
+    "Full Stack Engineer",
+    "Full Stack Developer",
+    "Data Analyst",
+    "ML Engineer",
+    "Machine Learning Engineer",
+    "AI Engineer",
+    "Artificial Intelligence Engineer",
+]
+
+# ─── Target Locations (India full-time) ──────────────────────────────────────
+TARGET_LOCATIONS = [
+    "Visakhapatnam",
+    "Hyderabad",
+    "Bengaluru",
+    "Chennai",
+    "Pune",
+    "Mumbai",
+    "Gurgaon",
+]
+
+# ─── Remotive API (replaces Upwork RSS & Remote.co) ─────────────────────────
+REMOTIVE_API_URL = "https://remotive.com/api/remote-jobs"
+REMOTIVE_CATEGORIES = ["software-dev", "data", "devops"]
+
+# ─── Role keywords for filtering API results ────────────────────────────────
+ROLE_KEYWORDS = [
+    "full stack",
+    "fullstack",
+    "frontend",
+    "backend",
+    "data analyst",
+    "data analysis",
+    "machine learning",
+    "ml engineer",
+    "ai engineer",
+    "artificial intelligence",
+    "deep learning",
+]
+
+# ─── Naukri URL patterns ────────────────────────────────────────────────────
+NAUKRI_BASE_URL = "https://www.naukri.com"
+
+def naukri_search_url(role: str, location: str) -> str:
+    """Build a Naukri.com search URL for a given role and location."""
+    role_slug = role.lower().replace(" ", "-")
+    location_slug = location.lower()
+    return f"{NAUKRI_BASE_URL}/{role_slug}-jobs-in-{location_slug}"
+
+# ─── LinkedIn URL patterns ──────────────────────────────────────────────────
+LINKEDIN_LOGIN_URL = "https://www.linkedin.com/login"
+LINKEDIN_JOBS_URL = "https://www.linkedin.com/jobs/search/"
+
+def linkedin_search_url(role: str, location: str) -> str:
+    """Build a LinkedIn jobs search URL."""
+    from urllib.parse import quote_plus
+    return (
+        f"{LINKEDIN_JOBS_URL}?"
+        f"keywords={quote_plus(role)}"
+        f"&location={quote_plus(location + ', India')}"
+        f"&f_TPR=r86400"  # Past 24 hours
+    )
+
+# ─── User-Agent Rotation Pool ───────────────────────────────────────────────
+USER_AGENTS = [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:126.0) Gecko/20100101 Firefox/126.0",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 14.5; rv:126.0) Gecko/20100101 Firefox/126.0",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_5) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15",
+    "Mozilla/5.0 (X11; Linux x86_64; rv:126.0) Gecko/20100101 Firefox/126.0",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_4_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 OPR/111.0.0.0",
+]
+
+def get_random_user_agent() -> str:
+    """Return a random user-agent string from the pool."""
+    return random.choice(USER_AGENTS)
+
+# ─── Human-like delay ranges (in seconds) ───────────────────────────────────
+DELAY_MIN = 2.0
+DELAY_MAX = 6.0
+KEYSTROKE_DELAY_MIN = 50   # milliseconds
+KEYSTROKE_DELAY_MAX = 180  # milliseconds
+
+def random_delay() -> float:
+    """Return a random delay between DELAY_MIN and DELAY_MAX seconds."""
+    return random.uniform(DELAY_MIN, DELAY_MAX)
+
+def random_keystroke_delay() -> int:
+    """Return a random keystroke delay in milliseconds."""
+    return random.randint(KEYSTROKE_DELAY_MIN, KEYSTROKE_DELAY_MAX)
+
+# ─── Data file paths ────────────────────────────────────────────────────────
+import os
+
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_DIR = os.path.join(PROJECT_ROOT, "data")
+DOCS_DIR = os.path.join(PROJECT_ROOT, "docs")
+
+FULLTIME_JOBS_FILE = os.path.join(DATA_DIR, "fulltime_jobs.json")
+FREELANCE_JOBS_FILE = os.path.join(DATA_DIR, "freelance_jobs.json")
+JOBS_STATE_FILE = os.path.join(DATA_DIR, "jobs_state.json")
+DASHBOARD_FILE = os.path.join(DOCS_DIR, "index.html")
