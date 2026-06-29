@@ -7,24 +7,24 @@ import random
 
 # ─── Target Roles ────────────────────────────────────────────────────────────
 TARGET_ROLES = [
-    "Full Stack Engineer",
-    "Full Stack Developer",
-    "Data Analyst",
-    "ML Engineer",
-    "Machine Learning Engineer",
     "AI Engineer",
     "Artificial Intelligence Engineer",
+    "ML Engineer",
+    "Machine Learning Engineer",
+    "Full Stack Developer",
+    "Full Stack Engineer",
+    "Software Engineer Intern",
+    "Software Engineer",
 ]
 
 # ─── Target Locations (India full-time) ──────────────────────────────────────
 TARGET_LOCATIONS = [
     "Visakhapatnam",
+    "Vijayawada",
     "Hyderabad",
     "Bengaluru",
     "Chennai",
     "Pune",
-    "Mumbai",
-    "Gurgaon",
 ]
 
 # ─── Remotive API (replaces Upwork RSS & Remote.co) ─────────────────────────
@@ -33,18 +33,44 @@ REMOTIVE_CATEGORIES = ["software-dev", "data", "devops"]
 
 # ─── Role keywords for filtering API results ────────────────────────────────
 ROLE_KEYWORDS = [
-    "full stack",
-    "fullstack",
-    "frontend",
-    "backend",
-    "data analyst",
-    "data analysis",
-    "machine learning",
-    "ml engineer",
     "ai engineer",
     "artificial intelligence",
+    "machine learning",
+    "ml engineer",
+    "full stack",
+    "fullstack",
+    "software engineer",
+    "software engineer intern",
+    "frontend",
+    "backend",
     "deep learning",
 ]
+
+# ─── Experience level keywords for filtering ───────────────────────────────
+EXPERIENCE_KEYWORDS = [
+    "fresher",
+    "0-1 years",
+    "0 to 1 years",
+    "intern",
+    "internship",
+    "entry level",
+    "entry-level",
+    "new grad",
+    "recent graduate",
+]
+
+# ─── Major Company Career Portals (for reference/manual application) ───────
+COMPANY_CAREER_PORTALS = {
+    "Microsoft": "https://jobs.careers.microsoft.com/global/en/job/1577325/Software-Engineering---Internship-Opportunities",
+    "Amazon": "https://www.amazon.jobs/content/en/career-programs/university?country%5B%5D=IN",
+    "Google": "https://careers.google.com/students/engineering-and-technical-internships/",
+    "TCS": "https://www.tcs.com/careers/india/tcs-all-india-nqt-hiring",
+    "TCS Internship": "https://www.tcs.com/careers/india/internship",
+    "Infosys": "https://www.infosys.com/careers/apply/students.html",
+    "Wipro": "https://careers.wipro.com/content/Early-Careers/",
+    "Accenture": "https://www.accenture.com/in-en/careers/jobdetails?id=R00276795_en",
+    "Atlassian": "https://www.atlassian.com/company/careers/earlycareers",
+}
 
 # ─── Naukri URL patterns ────────────────────────────────────────────────────
 NAUKRI_BASE_URL = "https://www.naukri.com"

@@ -36,6 +36,7 @@ from src.config import (
     TARGET_ROLES,
     TARGET_LOCATIONS,
     ROLE_KEYWORDS,
+    EXPERIENCE_KEYWORDS,
     REMOTIVE_API_URL,
     REMOTIVE_CATEGORIES,
     FULLTIME_JOBS_FILE,
@@ -59,6 +60,18 @@ def generate_job_id(platform: str, title: str, company: str, link: str) -> str:
     """Create a deterministic hash ID for deduplication."""
     raw = f"{platform}|{title}|{company}|{link}".lower().strip()
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:16]
+
+
+def matches_experience_level(description: str) -> bool:
+    """Check if job description matches fresher/intern experience level."""
+    if not description:
+        return True  # Allow if no description available
+    desc_lower = description.lower()
+    # Check for experience level keywords
+    has_fresher_keywords = any(kw in desc_lower for kw in EXPERIENCE_KEYWORDS)
+    # Reject if it requires 2+ years experience
+    requires_senior = any(kw in desc_lower for kw in ["2+ years", "2 years", "3+ years", "3 years", "4+ years", "5+ years", "senior", "lead"])
+    return has_fresher_keywords or not requires_senior
 
 
 def load_json(filepath: str) -> list | dict:
@@ -224,6 +237,10 @@ async def scrape_linkedin(dedup: DeduplicationEngine) -> list[dict]:
                                 if link_href.startswith("/"):
                                     link_href = f"https://www.linkedin.com{link_href}"
 
+                                # Check experience level from title
+                                if not matches_experience_level(title_text):
+                                    continue
+
                                 job_id = generate_job_id("linkedin", title_text, company_text, link_href)
 
                                 if dedup.is_new(job_id):
@@ -355,6 +372,10 @@ async def scrape_naukri(dedup: DeduplicationEngine) -> list[dict]:
                                 if not title_text or not link_href:
                                     continue
 
+                                # Check experience level from title
+                                if not matches_experience_level(title_text):
+                                    continue
+
                                 job_id = generate_job_id("naukri", title_text, company_text, link_href)
 
                                 if dedup.is_new(job_id):
@@ -428,6 +449,10 @@ def scrape_remotive(dedup: DeduplicationEngine) -> list[dict]:
                 # Filter by role keywords
                 title_lower = title.lower()
                 if not any(kw in title_lower for kw in ROLE_KEYWORDS):
+                    continue
+
+                # Filter by experience level
+                if not matches_experience_level(title):
                     continue
 
                 if not title or not link:

@@ -1,13 +1,26 @@
-# 🎯 Automated Daily Job Hunting & Freelance Aggregator Agent
+# 🎯 Automated Daily Job Hunting Agent for Palli Gyaneswari
 
-A fully automated Python pipeline that runs daily via GitHub Actions. It scrapes Indian tech hubs for full-time roles and indexes international remote/freelance contracts — then compiles everything into a live dashboard on GitHub Pages.
+A fully automated Python pipeline that runs daily via GitHub Actions. It scrapes Indian tech hubs and global remote platforms for AI/ML, Full Stack, and Software Engineer roles matching my profile — then compiles everything into a live dashboard on GitHub Pages.
+
+## 👤 My Profile
+
+- **Final-year B.Tech CS student** (graduating 2027), Raghu Engineering College, India
+- **Full-stack developer** (React, Node.js/Express, MySQL, JWT auth, Tailwind)
+- **Production projects:**
+  - Password K Vault — AI-powered password security platform (Node/React/MySQL, deployed on Vercel/Render/Railway, AI integration via OpenRouter API)
+  - Skill Synthex — ML career-prediction system (XGBoost, Random Forest, SVM, Logistic Regression, 99.67% accuracy)
+- **AI/ML internship experience** (classification modeling)
+- **Certifications:** Python/C/Java (NPTEL), MySQL (HackerRank), DSA (SmartInterviews)
+- **Experience level:** Fresher / 0-1 years (eligible for internships and entry-level/grad roles)
+- **LinkedIn:** [www.linkedin.com/in/palli-gyaneswari-32a7a02a2](https://www.linkedin.com/in/palli-gyaneswari-32a7a02a2)
 
 ## ✨ Features
 
 - **Multi-platform scraping** — LinkedIn, Naukri.com, and Remotive API
-- **Target roles** — Full Stack Engineer, Data Analyst, ML Engineer, AI Engineer
-- **Target locations (India)** — Visakhapatnam, Hyderabad, Bengaluru, Chennai, Pune, Mumbai, Gurgaon
+- **Target roles** — AI Engineer, ML Engineer, Full Stack Developer, Software Engineer Intern
+- **Target locations (India)** — Visakhapatnam, Vijayawada, Hyderabad, Bengaluru, Chennai, Pune
 - **Global freelance tracking** — Remote contracts from the Remotive API
+- **Experience filtering** — Only fresher/0-1 years/intern/new grad roles
 - **Deduplication** — Historical job IDs tracked in `jobs_state.json` to prevent duplicates
 - **Anti-detection** — Human-like delays and user-agent rotation via Playwright
 - **Auto-deployed dashboard** — Responsive HTML updated daily at `https://<username>.github.io/job-hunter/`
@@ -80,7 +93,7 @@ https://<your-github-username>.github.io/job-hunter/
 To trigger a scrape locally instead of waiting for the cron schedule:
 
 ```bash
-export LINKEDIN_USER="your-email"
+export LINKEDIN_USER=""
 export LINKEDIN_PASS="your-password"
 python src/scraper.py
 python src/generate_pages.py
