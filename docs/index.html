@@ -17,29 +17,31 @@
         }
 
         :root {
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #12121a;
-            --bg-card: rgba(255, 255, 255, 0.04);
-            --bg-card-hover: rgba(255, 255, 255, 0.08);
-            --bg-glass: rgba(255, 255, 255, 0.06);
-            --border-glass: rgba(255, 255, 255, 0.08);
-            --border-glass-hover: rgba(255, 255, 255, 0.15);
-            --text-primary: #e8e8ed;
-            --text-secondary: #8b8b9e;
-            --text-muted: #5a5a6e;
-            --accent-blue: #4f7df5;
-            --accent-purple: #8b5cf6;
-            --accent-emerald: #34d399;
-            --accent-amber: #fbbf24;
-            --accent-rose: #f472b6;
-            --gradient-primary: linear-gradient(135deg, #4f7df5, #8b5cf6);
-            --gradient-warm: linear-gradient(135deg, #f472b6, #fbbf24);
-            --shadow-glow: 0 0 40px rgba(79, 125, 245, 0.1);
-            --radius-sm: 8px;
-            --radius-md: 12px;
-            --radius-lg: 16px;
-            --radius-xl: 20px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f0f2f5;
+            --bg-glass: rgba(255, 255, 255, 0.95);
+            --border-glass: #e1e4e8;
+            --border-glass-hover: #0078d4;
+            --text-primary: #1f2937;
+            --text-secondary: #4b5563;
+            --text-muted: #9ca3af;
+            --accent-blue: #0078d4;
+            --accent-purple: #6b46c1;
+            --accent-emerald: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-rose: #ef4444;
+            --gradient-primary: linear-gradient(135deg, #0078d4, #106ebe);
+            --gradient-warm: linear-gradient(135deg, #f59e0b, #d97706);
+            --shadow-glow: 0 4px 20px rgba(0, 120, 212, 0.15);
+            --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-card-hover: 0 8px 24px rgba(0, 120, 212, 0.2);
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body {
@@ -55,21 +57,30 @@
         body::before {
             content: '';
             position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(ellipse at 20% 50%, rgba(79, 125, 245, 0.08) 0%, transparent 50%),
-                        radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.06) 0%, transparent 50%),
-                        radial-gradient(ellipse at 50% 80%, rgba(52, 211, 153, 0.04) 0%, transparent 50%);
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
             z-index: -1;
-            animation: bgFloat 20s ease-in-out infinite;
         }
 
-        @keyframes bgFloat {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            33% { transform: translate(2%, -1%) rotate(1deg); }
-            66% { transform: translate(-1%, 2%) rotate(-1deg); }
+        /* ─── Cursor Highlight Effect ─────────────────────────────── */
+        .cursor-highlight {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 120, 212, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            transition: opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .cursor-highlight.active {
+            opacity: 1;
         }
 
         /* ─── Container ───────────────────────────────────────────── */
@@ -145,8 +156,7 @@
         }
 
         .stat-card {
-            background: var(--bg-glass);
-            backdrop-filter: blur(20px);
+            background: var(--bg-card);
             border: 1px solid var(--border-glass);
             border-radius: var(--radius-lg);
             padding: 24px;
@@ -154,6 +164,7 @@
             transition: var(--transition);
             position: relative;
             overflow: hidden;
+            box-shadow: var(--shadow-card);
         }
 
         .stat-card::before {
@@ -162,7 +173,7 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 2px;
+            height: 3px;
             background: var(--gradient-primary);
             opacity: 0;
             transition: var(--transition);
@@ -170,7 +181,8 @@
 
         .stat-card:hover {
             border-color: var(--border-glass-hover);
-            transform: translateY(-2px);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-card-hover);
         }
 
         .stat-card:hover::before {
@@ -222,8 +234,7 @@
         .search-box input {
             width: 100%;
             padding: 14px 16px 14px 44px;
-            background: var(--bg-glass);
-            backdrop-filter: blur(20px);
+            background: var(--bg-card);
             border: 1px solid var(--border-glass);
             border-radius: var(--radius-md);
             color: var(--text-primary);
@@ -232,6 +243,7 @@
             font-weight: 400;
             outline: none;
             transition: var(--transition);
+            box-shadow: var(--shadow-card);
         }
 
         .search-box input::placeholder {
@@ -240,13 +252,12 @@
 
         .search-box input:focus {
             border-color: var(--accent-blue);
-            box-shadow: 0 0 0 3px rgba(79, 125, 245, 0.15);
+            box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.1);
         }
 
         .filter-select {
             padding: 14px 36px 14px 16px;
-            background: var(--bg-glass);
-            backdrop-filter: blur(20px);
+            background: var(--bg-card);
             border: 1px solid var(--border-glass);
             border-radius: var(--radius-md);
             color: var(--text-primary);
@@ -255,20 +266,22 @@
             outline: none;
             cursor: pointer;
             appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238b8b9e' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234b5563' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 14px center;
             transition: var(--transition);
             min-width: 150px;
+            box-shadow: var(--shadow-card);
         }
 
         .filter-select option {
-            background: var(--bg-secondary);
+            background: var(--bg-primary);
             color: var(--text-primary);
         }
 
         .filter-select:focus {
             border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.1);
         }
 
         /* ─── Job Cards Grid ──────────────────────────────────────── */
@@ -281,7 +294,6 @@
 
         .job-card {
             background: var(--bg-card);
-            backdrop-filter: blur(20px);
             border: 1px solid var(--border-glass);
             border-radius: var(--radius-lg);
             padding: 24px;
@@ -291,13 +303,15 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
+            box-shadow: var(--shadow-card);
+            cursor: pointer;
         }
 
         .job-card:hover {
             background: var(--bg-card-hover);
             border-color: var(--border-glass-hover);
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-glow);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-card-hover);
         }
 
         .job-card__header {
@@ -329,25 +343,25 @@
         }
 
         .badge--linkedin {
-            background: rgba(0, 119, 181, 0.15);
-            color: #5bb5f0;
-            border: 1px solid rgba(0, 119, 181, 0.25);
+            background: rgba(0, 119, 181, 0.1);
+            color: #0077b5;
+            border: 1px solid rgba(0, 119, 181, 0.2);
         }
 
         .badge--naukri {
-            background: rgba(79, 70, 229, 0.15);
-            color: #a78bfa;
-            border: 1px solid rgba(79, 70, 229, 0.25);
+            background: rgba(79, 70, 229, 0.1);
+            color: #4f46e5;
+            border: 1px solid rgba(79, 70, 229, 0.2);
         }
 
         .badge--remotive {
-            background: rgba(52, 211, 153, 0.15);
-            color: #6ee7b7;
-            border: 1px solid rgba(52, 211, 153, 0.25);
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.2);
         }
 
         .badge--unknown {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(107, 114, 128, 0.1);
             color: var(--text-secondary);
             border: 1px solid var(--border-glass);
         }
@@ -396,7 +410,7 @@
 
         .job-card__apply:hover {
             transform: scale(1.02);
-            box-shadow: 0 4px 20px rgba(79, 125, 245, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 120, 212, 0.3);
         }
 
         /* ─── Empty State ─────────────────────────────────────────── */
@@ -511,6 +525,9 @@
     </style>
 </head>
 <body>
+    <!-- Cursor Highlight Effect -->
+    <div class="cursor-highlight" id="cursor-highlight"></div>
+    
     <div class="container">
         <!-- Header -->
         <header class="header animate-in">
@@ -580,13 +597,26 @@
         <!-- Footer -->
         <footer class="footer">
             <p class="footer__text">
-                Last updated: June 29, 2026 at 06:28 UTC · Powered by 
+                Last updated: June 29, 2026 at 06:40 UTC · Powered by 
                 <a href="https://github.com" target="_blank">GitHub Actions</a>
             </p>
         </footer>
     </div>
 
     <script>
+        // ─── Cursor Highlight Effect ─────────────────────────────────
+        const cursorHighlight = document.getElementById('cursor-highlight');
+        
+        document.addEventListener('mousemove', (e) => {
+            cursorHighlight.style.left = e.clientX + 'px';
+            cursorHighlight.style.top = e.clientY + 'px';
+            cursorHighlight.classList.add('active');
+        });
+        
+        document.addEventListener('mouseleave', () => {
+            cursorHighlight.classList.remove('active');
+        });
+
         // ─── Job Data ─────────────────────────────────────────────────
         const ALL_JOBS = [{"id": "zeldin_ai_intern_001", "title": "AI Engineering Intern", "company": "Zeldin.ai", "location": "Kerala, India", "link": "https://in.linkedin.com/jobs/view/ai-engineering-intern-at-zeldin-ai-4250538618", "platform": "linkedin", "posted_date": "2025-06-27", "scraped_at": "2025-06-29T06:30:00Z", "why_fits": "Python/C++ skills, ML/neural nets knowledge, and GitHub projects align with building real AI products"}, {"id": "acelucid_trainee_001", "title": "AI/ML Engineer Trainee", "company": "Acelucid Technologies Inc", "location": "Dehradun, Uttarakhand, India", "link": "https://in.linkedin.com/jobs/view/ai-ml-engineer-trainee-at-acelucid-technologies-inc-4216741199", "platform": "linkedin", "posted_date": "2025-06-20", "scraped_at": "2025-06-29T06:30:00Z", "why_fits": "Requires Python, ML libraries (scikit-learn, pandas, NumPy, TensorFlow/PyTorch) - matches AI/ML internship experience and Skill Synthex project"}, {"id": "abstrabit_intern_001", "title": "AI/ML Engineering Intern", "company": "Abstrabit Technologies", "location": "Bengaluru, Karnataka, India", "link": "https://in.linkedin.com/jobs/view/ai-ml-engineering-intern-at-abstrabit-technologies-4200988484", "platform": "linkedin", "posted_date": "2025-06-15", "scraped_at": "2025-06-29T06:30:00Z", "why_fits": "Focus on custom chatbots, knowledge bases, and AI/ML integration - aligns with AI-powered Password K Vault project"}, {"id": "iterate_ai_fullstack_001", "title": "Software Development Intern (Full Stack)", "company": "Iterate AI", "location": "Remote", "link": "https://in.linkedin.com/jobs/view/software-development-intern-full-stack-at-iterate-ai-4137997345", "platform": "linkedin", "posted_date": "2025-06-15", "scraped_at": "2025-06-29T06:30:00Z", "why_fits": "Requires TypeScript, NextJS/React, SQL databases, cloud deployment - matches React, Node.js, and Vercel/Render deployment experience"}, {"id": "inlighnx_fullstack_001", "title": "Full Stack Development Intern", "company": "InLighnX Global Private Limited", "location": "Remote", "link": "https://in.linkedin.com/jobs/view/full-stack-development-intern-at-inlighnx-global-private-limited-4250363094", "platform": "linkedin", "posted_date": "2025-06-25", "scraped_at": "2025-06-29T06:30:00Z", "why_fits": "Requires React.js/Vue.js, Node.js/Express, MongoDB/MySQL/PostgreSQL - perfect match with full-stack tech stack"}, {"id": "kapidron_fullstack_001", "title": "Full Stack Developer Intern", "company": "Kapidron", "location": "Remote", "link": "https://in.linkedin.com/jobs/view/full-stack-developer-intern-at-kapidron-4227632437", "platform": "linkedin", "posted_date": "2025-06-20", "scraped_at": "2025-06-29T06:30:00Z", "why_fits": "Requires Next.js, React, React Native, AWS, Node.js - aligns with React, Node.js, and cloud deployment skills"}, {"id": "kaabil_node_001", "title": "Node Js Intern", "company": "Kaabil Finance Private Limited", "location": "Jaipur, Rajasthan, India", "link": "https://in.linkedin.com/jobs/view/node-js-intern-at-kaabil-finance-private-limited-4191533732", "platform": "linkedin", "posted_date": "2025-06-18", "scraped_at": "2025-06-29T06:30:00Z", "why_fits": "Requires JavaScript, Node.js, React Framework - matches Node.js/Express and React experience"}, {"id": "cypherock_fullstack_001", "title": "Full Stack Developer Intern", "company": "Cypherock", "location": "Ghaziabad, Uttar Pradesh, India", "link": "https://in.linkedin.com/jobs/view/full-stack-developer-intern-at-cypherock-3627620001", "platform": "linkedin", "posted_date": "2025-06-10", "scraped_at": "2025-06-29T06:30:00Z", "why_fits": "Requires MERN stack, DevOps on AWS - matches React, Node.js, and deployment experience"}, {"id": "bixso_ai_ml_001", "title": "Fresher/Intern AI/ML Engineering", "company": "BIXSO", "location": "Remote (Ho Chi Minh City, Vietnam)", "link": "https://vn.linkedin.com/jobs/view/fresher-intern-ai-ml-engineering-at-bixso-4202762762", "platform": "linkedin", "posted_date": "2025-06-22", "scraped_at": "2025-06-29T06:30:00Z", "why_fits": "Remote role focusing on AI applications with Python - matches AI/ML skills and Python proficiency"}, {"id": "stremly_ai_001", "title": "AI Software Developer Intern", "company": "Stremly", "location": "Remote", "link": "https://in.linkedin.com/jobs/view/ai-software-developer-intern-at-stremly-4189387176", "platform": "linkedin", "posted_date": "2025-06-12", "scraped_at": "2025-06-29T06:30:00Z", "why_fits": "Requires Python, AI frameworks, LLMs, FastAPI - aligns with AI integration via OpenRouter API and backend development skills"}, {"id": "05e05d27726043c4", "title": "Senior Independent AI Engineer / Architect", "company": "A.Team", "location": "Americas, Europe, Israel", "link": "https://remotive.com/remote-jobs/software-development/senior-independent-ai-engineer-architect-1919266", "platform": "remotive", "posted_date": "2026-06-16", "scraped_at": "2026-06-28T07:46:49.336932+00:00"}, {"id": "36facfd6c9486bb7", "title": "Frontend Developer", "company": "Quinncia Inc", "location": "Worldwide", "link": "https://remotive.com/remote-jobs/software-development/frontend-developer-2090991", "platform": "remotive", "posted_date": "2026-06-16", "scraped_at": "2026-06-28T07:46:49.336955+00:00"}, {"id": "3f27252385084bdc", "title": "Online Data Analyst Canada (French Language)", "company": "TELUS Digital", "location": "Canada", "link": "https://remotive.com/remote-jobs/all-others/online-data-analyst-canada-french-language-2090945", "platform": "remotive", "posted_date": "2026-06-04", "scraped_at": "2026-06-28T07:46:49.336976+00:00"}, {"id": "e48d96633045395b", "title": "Online Data Analyst United States Spanish speakers", "company": "TELUS Digital", "location": "USA", "link": "https://remotive.com/remote-jobs/all-others/online-data-analyst-united-states-spanish-speakers-2090946", "platform": "remotive", "posted_date": "2026-06-04", "scraped_at": "2026-06-28T07:46:49.336982+00:00"}, {"id": "e7dd7ce48677a480", "title": "Online Data Analyst Canada", "company": "TELUS Digital", "location": "Canada", "link": "https://remotive.com/remote-jobs/all-others/online-data-analyst-canada-2090944", "platform": "remotive", "posted_date": "2026-06-04", "scraped_at": "2026-06-28T07:46:49.336987+00:00"}];
 
