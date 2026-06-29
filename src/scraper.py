@@ -42,6 +42,7 @@ from src.config import (
     FULLTIME_JOBS_FILE,
     FREELANCE_JOBS_FILE,
     JOBS_STATE_FILE,
+    APPLICATION_STATUS_FILE,
     DATA_DIR,
     get_random_user_agent,
     random_delay,
@@ -49,6 +50,12 @@ from src.config import (
     linkedin_search_url,
     naukri_search_url,
     LINKEDIN_LOGIN_URL,
+    WHATSAPP_ENABLED,
+    WHATSAPP_API_URL,
+    WHATSAPP_API_KEY,
+    WHATSAPP_CHANNEL_ID,
+    INDEED_API_URL,
+    GLASSDOOR_API_URL,
 )
 
 
@@ -72,6 +79,78 @@ def matches_experience_level(description: str) -> bool:
     # Reject if it requires 2+ years experience
     requires_senior = any(kw in desc_lower for kw in ["2+ years", "2 years", "3+ years", "3 years", "4+ years", "5+ years", "senior", "lead"])
     return has_fresher_keywords or not requires_senior
+
+
+def send_whatsapp_notification(new_jobs: list[dict]) -> None:
+    """Send WhatsApp notification about new jobs to hidden channel."""
+    if not WHATSAPP_ENABLED or not WHATSAPP_API_URL or not WHATSAPP_API_KEY or not WHATSAPP_CHANNEL_ID:
+        logger.info("WhatsApp notifications not configured - skipping")
+        return
+    
+    if not new_jobs:
+        logger.info("No new jobs to notify about")
+        return
+    
+    try:
+        # Format message
+        message = f"🎯 *New Jobs Found!* ({len(new_jobs)} jobs)\n\n"
+        for job in new_jobs[:10]:  # Limit to first 10 jobs
+            message += f"• {job.get('title', 'N/A')} at {job.get('company', 'N/A')}\n"
+            message += f"  📍 {job.get('location', 'N/A')}\n"
+            message += f"  🔗 {job.get('link', 'N/A')}\n\n"
+        
+        if len(new_jobs) > 10:
+            message += f"... and {len(new_jobs) - 10} more jobs\n"
+        
+        message += f"\nCheck dashboard for full list."
+        
+        # Send via WhatsApp API
+        import requests
+        response = requests.post(
+            WHATSAPP_API_URL,
+            headers={
+                "Authorization": f"Bearer {WHATSAPP_API_KEY}",
+                "Content-Type": "application/json"
+            },
+            json={
+                "channel_id": WHATSAPP_CHANNEL_ID,
+                "message": message
+            },
+            timeout=30
+        )
+        response.raise_for_status()
+        logger.info(f"WhatsApp notification sent successfully for {len(new_jobs)} jobs")
+        
+    except Exception as e:
+        logger.error(f"Failed to send WhatsApp notification: {e}")
+
+
+def load_application_status() -> dict:
+    """Load application status tracking file."""
+    try:
+        with open(APPLICATION_STATUS_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {"applications": {}}
+
+
+def save_application_status(status: dict) -> None:
+    """Save application status tracking file."""
+    save_json(APPLICATION_STATUS_FILE, status)
+
+
+def mark_job_applied(job_id: str, job_title: str, company: str) -> None:
+    """Mark a job as applied with timestamp."""
+    status = load_application_status()
+    status["applications"][job_id] = {
+        "job_title": job_title,
+        "company": company,
+        "applied_at": datetime.now(timezone.utc).isoformat(),
+        "status": "applied",
+        "email_confirmation": False
+    }
+    save_application_status(status)
+    logger.info(f"Marked job {job_id} as applied")
 
 
 def load_json(filepath: str) -> list | dict:
@@ -350,7 +429,7 @@ async def scrape_naukri(dedup: DeduplicationEngine) -> list[dict]:
                             "[data-job-id], .cust-job-tuple"
                         )
 
-                        for card in cards[:10]:  # Cap at 10 per combo
+                        for card in cards[:15]:  # Increased from 10 to 15 per combo
                             try:
                                 title_el = await card.query_selector(
                                     "a.title, .row1 a, .info h2 a, a[class*='title']"
@@ -363,17 +442,30 @@ async def scrape_naukri(dedup: DeduplicationEngine) -> list[dict]:
                                     ".loc, .locWdth, .row3 .loc-wrap .loc, span.loc-wrap .loc, "
                                     "span[class*='loc']"
                                 )
+                                description_el = await card.query_selector(
+                                    ".job-desc, .description, .job-description, .job-tuple"
+                                )
+                                experience_el = await card.query_selector(
+                                    ".exp, .expwdth, .experience, span[class*='exp']"
+                                )
+                                skills_el = await card.query_selector(
+                                    ".skills, .skill-tag, .tags, span[class*='skill']"
+                                )
 
                                 title_text = (await title_el.inner_text()).strip() if title_el else ""
                                 company_text = (await company_el.inner_text()).strip() if company_el else ""
                                 location_text = (await location_el.inner_text()).strip() if location_el else location
                                 link_href = await title_el.get_attribute("href") if title_el else ""
+                                description_text = (await description_el.inner_text()).strip() if description_el else ""
+                                experience_text = (await experience_el.inner_text()).strip() if experience_el else ""
+                                skills_text = (await skills_el.inner_text()).strip() if skills_el else ""
 
                                 if not title_text or not link_href:
                                     continue
 
-                                # Check experience level from title
-                                if not matches_experience_level(title_text):
+                                # Check experience level from title, description, and experience field
+                                combined_text = f"{title_text} {description_text} {experience_text}"
+                                if not matches_experience_level(combined_text):
                                     continue
 
                                 job_id = generate_job_id("naukri", title_text, company_text, link_href)
@@ -388,6 +480,9 @@ async def scrape_naukri(dedup: DeduplicationEngine) -> list[dict]:
                                         "platform": "naukri",
                                         "posted_date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
                                         "scraped_at": datetime.now(timezone.utc).isoformat(),
+                                        "description": description_text[:500] if description_text else "",
+                                        "experience": experience_text,
+                                        "skills": skills_text,
                                     })
                                     dedup.mark_seen(job_id)
 
@@ -489,6 +584,133 @@ def scrape_remotive(dedup: DeduplicationEngine) -> list[dict]:
 
 
 # ═══════════════════════════════════════════════════════════════════════════
+# 4. Indeed Scraper (Playwright - public listings)
+# ═══════════════════════════════════════════════════════════════════════════
+
+async def scrape_indeed(dedup: DeduplicationEngine) -> list[dict]:
+    """
+    Scrapes Indeed public job listings using Playwright.
+    No login required - scrapes publicly visible search results.
+    """
+    jobs = []
+
+    try:
+        from playwright.async_api import async_playwright
+
+        async with async_playwright() as p:
+            browser = await p.chromium.launch(
+                headless=True,
+                args=[
+                    "--disable-blink-features=AutomationControlled",
+                    "--no-sandbox",
+                    "--disable-dev-shm-usage",
+                ],
+            )
+
+            context = await browser.new_context(
+                user_agent=get_random_user_agent(),
+                viewport={"width": 1920, "height": 1080},
+                locale="en-IN",
+            )
+
+            await context.add_init_script("""
+                Object.defineProperty(navigator, 'webdriver', {get: () => undefined});
+            """)
+
+            page = await context.new_page()
+
+            # Limit to first 3 roles to stay under rate limits
+            roles_to_scrape = TARGET_ROLES[:3]
+
+            for role in roles_to_scrape:
+                for location in TARGET_LOCATIONS[:3]:
+                    try:
+                        # Build Indeed search URL
+                        url = f"{INDEED_API_URL}/jobs?q={role.replace(' ', '+')}&l={location.replace(' ', '+')}&fromage=30"
+                        logger.info(f"Indeed: Searching '{role}' in '{location}'...")
+                        await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+                        await asyncio.sleep(random_delay())
+
+                        # Wait for job cards
+                        try:
+                            await page.wait_for_selector(
+                                ".job_seen_beacon, .jobTitle, .css-1x7z1ps",
+                                timeout=10000,
+                            )
+                        except Exception:
+                            logger.debug(f"Indeed: No results for '{role}' in '{location}'")
+                            continue
+
+                        # Scroll to load lazy content
+                        for _ in range(2):
+                            await page.evaluate("window.scrollBy(0, 600)")
+                            await asyncio.sleep(random_delay() / 3)
+
+                        # Extract job cards
+                        cards = await page.query_selector_all(
+                            ".job_seen_beacon, .jobTitle, .css-1x7z1ps"
+                        )
+
+                        for card in cards[:8]:  # Cap at 8 per combo
+                            try:
+                                title_el = await card.query_selector("h2, .jobTitle")
+                                company_el = await card.query_selector(".companyName, .css-1x7z1ps")
+                                location_el = await card.query_selector(".companyLocation, .css-t4u72d")
+                                link_el = await card.query_selector("a")
+
+                                title_text = (await title_el.inner_text()).strip() if title_el else ""
+                                company_text = (await company_el.inner_text()).strip() if company_el else ""
+                                location_text = (await location_el.inner_text()).strip() if location_el else location
+                                link_href = await link_el.get_attribute("href") if link_el else ""
+
+                                if not title_text or not link_href:
+                                    continue
+
+                                # Check experience level
+                                if not matches_experience_level(title_text):
+                                    continue
+
+                                # Normalize link
+                                if link_href.startswith("/"):
+                                    link_href = f"{INDEED_API_URL}{link_href}"
+
+                                job_id = generate_job_id("indeed", title_text, company_text, link_href)
+
+                                if dedup.is_new(job_id):
+                                    jobs.append({
+                                        "id": job_id,
+                                        "title": title_text,
+                                        "company": company_text,
+                                        "location": location_text,
+                                        "link": link_href,
+                                        "platform": "indeed",
+                                        "posted_date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+                                        "scraped_at": datetime.now(timezone.utc).isoformat(),
+                                    })
+                                    dedup.mark_seen(job_id)
+
+                            except Exception as e:
+                                logger.debug(f"Indeed: Error parsing card — {e}")
+                                continue
+
+                        await asyncio.sleep(random_delay())
+
+                    except Exception as e:
+                        logger.warning(f"Indeed: Error scraping '{role}' in '{location}' — {e}")
+                        continue
+
+            await browser.close()
+
+    except ImportError:
+        logger.error("Playwright not installed — run: pip install playwright && playwright install")
+    except Exception as e:
+        logger.error(f"Indeed scraper error: {e}")
+
+    logger.info(f"Indeed: Collected {len(jobs)} new jobs")
+    return jobs
+
+
+# ═══════════════════════════════════════════════════════════════════════════
 # Main orchestrator
 # ═══════════════════════════════════════════════════════════════════════════
 
@@ -538,6 +760,13 @@ async def main():
     except Exception as e:
         logger.error(f"Remotive scraper failed: {e}")
 
+    # 4. Indeed
+    try:
+        indeed_jobs = await scrape_indeed(dedup)
+        new_fulltime.extend(indeed_jobs)
+    except Exception as e:
+        logger.error(f"Indeed scraper failed: {e}")
+
     # ── Merge and save ───────────────────────────────────────────────────
     fulltime_jobs.extend(new_fulltime)
     freelance_jobs.extend(new_freelance)
@@ -545,6 +774,10 @@ async def main():
     save_json(FULLTIME_JOBS_FILE, fulltime_jobs)
     save_json(FREELANCE_JOBS_FILE, freelance_jobs)
     dedup.save()
+
+    # ── Send WhatsApp notification ───────────────────────────────────────
+    all_new_jobs = new_fulltime + new_freelance
+    send_whatsapp_notification(all_new_jobs)
 
     # ── Summary ──────────────────────────────────────────────────────────
     logger.info("=" * 60)

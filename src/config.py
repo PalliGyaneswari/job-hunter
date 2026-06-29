@@ -31,6 +31,10 @@ TARGET_LOCATIONS = [
 REMOTIVE_API_URL = "https://remotive.com/api/remote-jobs"
 REMOTIVE_CATEGORIES = ["software-dev", "data", "devops"]
 
+# ─── Additional Job Sources ───────────────────────────────────────────────────
+INDEED_API_URL = "https://indeed.com"
+GLASSDOOR_API_URL = "https://glassdoor.com"
+
 # ─── Role keywords for filtering API results ────────────────────────────────
 ROLE_KEYWORDS = [
     "ai engineer",
@@ -71,6 +75,16 @@ COMPANY_CAREER_PORTALS = {
     "Accenture": "https://www.accenture.com/in-en/careers/jobdetails?id=R00276795_en",
     "Atlassian": "https://www.atlassian.com/company/careers/earlycareers",
 }
+
+# ─── WhatsApp Notification Settings (Hidden from public view) ───────────────
+# These will be loaded from environment variables/GitHub secrets
+WHATSAPP_ENABLED = os.environ.get("WHATSAPP_ENABLED", "false").lower() == "true"
+WHATSAPP_API_URL = os.environ.get("WHATSAPP_API_URL", "")
+WHATSAPP_API_KEY = os.environ.get("WHATSAPP_API_KEY", "")
+WHATSAPP_CHANNEL_ID = os.environ.get("WHATSAPP_CHANNEL_ID", "")  # Hidden channel ID
+
+# ─── Application Tracking ─────────────────────────────────────────────────────
+APPLICATION_STATUS_FILE = os.path.join(DATA_DIR, "application_status.json")
 
 # ─── Naukri URL patterns ────────────────────────────────────────────────────
 NAUKRI_BASE_URL = "https://www.naukri.com"

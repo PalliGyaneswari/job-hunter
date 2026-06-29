@@ -2,8 +2,8 @@ name: 🎯 Daily Job Hunter
 
 on:
   schedule:
-    # Runs at 05:00 UTC every day (10:30 AM IST)
-    - cron: '0 5 * * *'
+    # Runs at 05:00 UTC and 17:00 UTC every day (10:30 AM IST and 10:30 PM IST)
+    - cron: '0 5,17 * * *'
   workflow_dispatch:  # Allow manual trigger from GitHub UI
 
 permissions:

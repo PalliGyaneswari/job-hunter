@@ -73,29 +73,31 @@ def generate_dashboard():
         }}
 
         :root {{
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #12121a;
-            --bg-card: rgba(255, 255, 255, 0.04);
-            --bg-card-hover: rgba(255, 255, 255, 0.08);
-            --bg-glass: rgba(255, 255, 255, 0.06);
-            --border-glass: rgba(255, 255, 255, 0.08);
-            --border-glass-hover: rgba(255, 255, 255, 0.15);
-            --text-primary: #e8e8ed;
-            --text-secondary: #8b8b9e;
-            --text-muted: #5a5a6e;
-            --accent-blue: #4f7df5;
-            --accent-purple: #8b5cf6;
-            --accent-emerald: #34d399;
-            --accent-amber: #fbbf24;
-            --accent-rose: #f472b6;
-            --gradient-primary: linear-gradient(135deg, #4f7df5, #8b5cf6);
-            --gradient-warm: linear-gradient(135deg, #f472b6, #fbbf24);
-            --shadow-glow: 0 0 40px rgba(79, 125, 245, 0.1);
-            --radius-sm: 8px;
-            --radius-md: 12px;
-            --radius-lg: 16px;
-            --radius-xl: 20px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f0f2f5;
+            --bg-glass: rgba(255, 255, 255, 0.95);
+            --border-glass: #e1e4e8;
+            --border-glass-hover: #0078d4;
+            --text-primary: #1f2937;
+            --text-secondary: #4b5563;
+            --text-muted: #9ca3af;
+            --accent-blue: #0078d4;
+            --accent-purple: #6b46c1;
+            --accent-emerald: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-rose: #ef4444;
+            --gradient-primary: linear-gradient(135deg, #0078d4, #106ebe);
+            --gradient-warm: linear-gradient(135deg, #f59e0b, #d97706);
+            --shadow-glow: 0 4px 20px rgba(0, 120, 212, 0.15);
+            --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-card-hover: 0 8px 24px rgba(0, 120, 212, 0.2);
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }}
 
         body {{
@@ -111,21 +113,30 @@ def generate_dashboard():
         body::before {{
             content: '';
             position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(ellipse at 20% 50%, rgba(79, 125, 245, 0.08) 0%, transparent 50%),
-                        radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.06) 0%, transparent 50%),
-                        radial-gradient(ellipse at 50% 80%, rgba(52, 211, 153, 0.04) 0%, transparent 50%);
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
             z-index: -1;
-            animation: bgFloat 20s ease-in-out infinite;
         }}
 
-        @keyframes bgFloat {{
-            0%, 100% {{ transform: translate(0, 0) rotate(0deg); }}
-            33% {{ transform: translate(2%, -1%) rotate(1deg); }}
-            66% {{ transform: translate(-1%, 2%) rotate(-1deg); }}
+        /* ─── Cursor Highlight Effect ─────────────────────────────── */
+        .cursor-highlight {{
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 120, 212, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            transition: opacity 0.3s ease;
+            opacity: 0;
+        }}
+
+        .cursor-highlight.active {{
+            opacity: 1;
         }}
 
         /* ─── Container ───────────────────────────────────────────── */
@@ -201,8 +212,7 @@ def generate_dashboard():
         }}
 
         .stat-card {{
-            background: var(--bg-glass);
-            backdrop-filter: blur(20px);
+            background: var(--bg-card);
             border: 1px solid var(--border-glass);
             border-radius: var(--radius-lg);
             padding: 24px;
@@ -210,6 +220,7 @@ def generate_dashboard():
             transition: var(--transition);
             position: relative;
             overflow: hidden;
+            box-shadow: var(--shadow-card);
         }}
 
         .stat-card::before {{
@@ -218,7 +229,7 @@ def generate_dashboard():
             top: 0;
             left: 0;
             right: 0;
-            height: 2px;
+            height: 3px;
             background: var(--gradient-primary);
             opacity: 0;
             transition: var(--transition);
@@ -226,7 +237,8 @@ def generate_dashboard():
 
         .stat-card:hover {{
             border-color: var(--border-glass-hover);
-            transform: translateY(-2px);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-card-hover);
         }}
 
         .stat-card:hover::before {{
@@ -278,8 +290,7 @@ def generate_dashboard():
         .search-box input {{
             width: 100%;
             padding: 14px 16px 14px 44px;
-            background: var(--bg-glass);
-            backdrop-filter: blur(20px);
+            background: var(--bg-card);
             border: 1px solid var(--border-glass);
             border-radius: var(--radius-md);
             color: var(--text-primary);
@@ -288,6 +299,7 @@ def generate_dashboard():
             font-weight: 400;
             outline: none;
             transition: var(--transition);
+            box-shadow: var(--shadow-card);
         }}
 
         .search-box input::placeholder {{
@@ -296,13 +308,12 @@ def generate_dashboard():
 
         .search-box input:focus {{
             border-color: var(--accent-blue);
-            box-shadow: 0 0 0 3px rgba(79, 125, 245, 0.15);
+            box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.1);
         }}
 
         .filter-select {{
             padding: 14px 36px 14px 16px;
-            background: var(--bg-glass);
-            backdrop-filter: blur(20px);
+            background: var(--bg-card);
             border: 1px solid var(--border-glass);
             border-radius: var(--radius-md);
             color: var(--text-primary);
@@ -311,20 +322,22 @@ def generate_dashboard():
             outline: none;
             cursor: pointer;
             appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238b8b9e' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234b5563' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 14px center;
             transition: var(--transition);
             min-width: 150px;
+            box-shadow: var(--shadow-card);
         }}
 
         .filter-select option {{
-            background: var(--bg-secondary);
+            background: var(--bg-primary);
             color: var(--text-primary);
         }}
 
         .filter-select:focus {{
             border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.1);
         }}
 
         /* ─── Job Cards Grid ──────────────────────────────────────── */
@@ -337,7 +350,6 @@ def generate_dashboard():
 
         .job-card {{
             background: var(--bg-card);
-            backdrop-filter: blur(20px);
             border: 1px solid var(--border-glass);
             border-radius: var(--radius-lg);
             padding: 24px;
@@ -347,13 +359,15 @@ def generate_dashboard():
             display: flex;
             flex-direction: column;
             gap: 12px;
+            box-shadow: var(--shadow-card);
+            cursor: pointer;
         }}
 
         .job-card:hover {{
             background: var(--bg-card-hover);
             border-color: var(--border-glass-hover);
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-glow);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-card-hover);
         }}
 
         .job-card__header {{
@@ -385,25 +399,25 @@ def generate_dashboard():
         }}
 
         .badge--linkedin {{
-            background: rgba(0, 119, 181, 0.15);
-            color: #5bb5f0;
-            border: 1px solid rgba(0, 119, 181, 0.25);
+            background: rgba(0, 119, 181, 0.1);
+            color: #0077b5;
+            border: 1px solid rgba(0, 119, 181, 0.2);
         }}
 
         .badge--naukri {{
-            background: rgba(79, 70, 229, 0.15);
-            color: #a78bfa;
-            border: 1px solid rgba(79, 70, 229, 0.25);
+            background: rgba(79, 70, 229, 0.1);
+            color: #4f46e5;
+            border: 1px solid rgba(79, 70, 229, 0.2);
         }}
 
         .badge--remotive {{
-            background: rgba(52, 211, 153, 0.15);
-            color: #6ee7b7;
-            border: 1px solid rgba(52, 211, 153, 0.25);
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.2);
         }}
 
         .badge--unknown {{
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(107, 114, 128, 0.1);
             color: var(--text-secondary);
             border: 1px solid var(--border-glass);
         }}
@@ -452,7 +466,7 @@ def generate_dashboard():
 
         .job-card__apply:hover {{
             transform: scale(1.02);
-            box-shadow: 0 4px 20px rgba(79, 125, 245, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 120, 212, 0.3);
         }}
 
         /* ─── Empty State ─────────────────────────────────────────── */
@@ -567,6 +581,9 @@ def generate_dashboard():
     </style>
 </head>
 <body>
+    <!-- Cursor Highlight Effect -->
+    <div class="cursor-highlight" id="cursor-highlight"></div>
+    
     <div class="container">
         <!-- Header -->
         <header class="header animate-in">
@@ -643,6 +660,19 @@ def generate_dashboard():
     </div>
 
     <script>
+        // ─── Cursor Highlight Effect ─────────────────────────────────
+        const cursorHighlight = document.getElementById('cursor-highlight');
+        
+        document.addEventListener('mousemove', (e) => {{
+            cursorHighlight.style.left = e.clientX + 'px';
+            cursorHighlight.style.top = e.clientY + 'px';
+            cursorHighlight.classList.add('active');
+        }});
+        
+        document.addEventListener('mouseleave', () => {{
+            cursorHighlight.classList.remove('active');
+        }});
+
         // ─── Job Data ─────────────────────────────────────────────────
         const ALL_JOBS = {jobs_json};
 
