@@ -526,15 +526,15 @@
         <!-- Stats -->
         <div class="stats animate-in" style="animation-delay: 0.1s">
             <div class="stat-card">
-                <div class="stat-card__number" id="stat-total">5</div>
+                <div class="stat-card__number" id="stat-total">15</div>
                 <div class="stat-card__label">Total Jobs</div>
             </div>
             <div class="stat-card">
-                <div class="stat-card__number" id="stat-new">5</div>
+                <div class="stat-card__number" id="stat-new">0</div>
                 <div class="stat-card__label">New Today</div>
             </div>
             <div class="stat-card">
-                <div class="stat-card__number" id="stat-fulltime">0</div>
+                <div class="stat-card__number" id="stat-fulltime">10</div>
                 <div class="stat-card__label">Full-time</div>
             </div>
             <div class="stat-card">
@@ -551,7 +551,7 @@
             </div>
             <select class="filter-select" id="filter-platform">
                 <option value="">All Platforms</option>
-                <option value="remotive">Remotive</option>
+                <option value="linkedin">Linkedin</option><option value="remotive">Remotive</option>
             </select>
             <select class="filter-select" id="filter-type">
                 <option value="">All Types</option>
@@ -562,7 +562,7 @@
 
         <!-- Results Count -->
         <div class="results-count animate-in" style="animation-delay: 0.25s">
-            <span id="results-text">Showing <strong>5</strong> jobs</span>
+            <span id="results-text">Showing <strong>15</strong> jobs</span>
         </div>
 
         <!-- Jobs Grid -->
@@ -580,7 +580,7 @@
         <!-- Footer -->
         <footer class="footer">
             <p class="footer__text">
-                Last updated: June 28, 2026 at 07:47 UTC · Powered by 
+                Last updated: June 29, 2026 at 06:28 UTC · Powered by 
                 <a href="https://github.com" target="_blank">GitHub Actions</a>
             </p>
         </footer>
@@ -588,10 +588,10 @@
 
     <script>
         // ─── Job Data ─────────────────────────────────────────────────
-        const ALL_JOBS = [{"id": "05e05d27726043c4", "title": "Senior Independent AI Engineer / Architect", "company": "A.Team", "location": "Americas, Europe, Israel", "link": "https://remotive.com/remote-jobs/software-development/senior-independent-ai-engineer-architect-1919266", "platform": "remotive", "posted_date": "2026-06-16", "scraped_at": "2026-06-28T07:46:49.336932+00:00"}, {"id": "36facfd6c9486bb7", "title": "Frontend Developer", "company": "Quinncia Inc", "location": "Worldwide", "link": "https://remotive.com/remote-jobs/software-development/frontend-developer-2090991", "platform": "remotive", "posted_date": "2026-06-16", "scraped_at": "2026-06-28T07:46:49.336955+00:00"}, {"id": "3f27252385084bdc", "title": "Online Data Analyst Canada (French Language)", "company": "TELUS Digital", "location": "Canada", "link": "https://remotive.com/remote-jobs/all-others/online-data-analyst-canada-french-language-2090945", "platform": "remotive", "posted_date": "2026-06-04", "scraped_at": "2026-06-28T07:46:49.336976+00:00"}, {"id": "e48d96633045395b", "title": "Online Data Analyst United States Spanish speakers", "company": "TELUS Digital", "location": "USA", "link": "https://remotive.com/remote-jobs/all-others/online-data-analyst-united-states-spanish-speakers-2090946", "platform": "remotive", "posted_date": "2026-06-04", "scraped_at": "2026-06-28T07:46:49.336982+00:00"}, {"id": "e7dd7ce48677a480", "title": "Online Data Analyst Canada", "company": "TELUS Digital", "location": "Canada", "link": "https://remotive.com/remote-jobs/all-others/online-data-analyst-canada-2090944", "platform": "remotive", "posted_date": "2026-06-04", "scraped_at": "2026-06-28T07:46:49.336987+00:00"}];
+        const ALL_JOBS = [{"id": "zeldin_ai_intern_001", "title": "AI Engineering Intern", "company": "Zeldin.ai", "location": "Kerala, India", "link": "https://in.linkedin.com/jobs/view/ai-engineering-intern-at-zeldin-ai-4250538618", "platform": "linkedin", "posted_date": "2025-06-27", "scraped_at": "2025-06-29T06:30:00Z", "why_fits": "Python/C++ skills, ML/neural nets knowledge, and GitHub projects align with building real AI products"}, {"id": "acelucid_trainee_001", "title": "AI/ML Engineer Trainee", "company": "Acelucid Technologies Inc", "location": "Dehradun, Uttarakhand, India", "link": "https://in.linkedin.com/jobs/view/ai-ml-engineer-trainee-at-acelucid-technologies-inc-4216741199", "platform": "linkedin", "posted_date": "2025-06-20", "scraped_at": "2025-06-29T06:30:00Z", "why_fits": "Requires Python, ML libraries (scikit-learn, pandas, NumPy, TensorFlow/PyTorch) - matches AI/ML internship experience and Skill Synthex project"}, {"id": "abstrabit_intern_001", "title": "AI/ML Engineering Intern", "company": "Abstrabit Technologies", "location": "Bengaluru, Karnataka, India", "link": "https://in.linkedin.com/jobs/view/ai-ml-engineering-intern-at-abstrabit-technologies-4200988484", "platform": "linkedin", "posted_date": "2025-06-15", "scraped_at": "2025-06-29T06:30:00Z", "why_fits": "Focus on custom chatbots, knowledge bases, and AI/ML integration - aligns with AI-powered Password K Vault project"}, {"id": "iterate_ai_fullstack_001", "title": "Software Development Intern (Full Stack)", "company": "Iterate AI", "location": "Remote", "link": "https://in.linkedin.com/jobs/view/software-development-intern-full-stack-at-iterate-ai-4137997345", "platform": "linkedin", "posted_date": "2025-06-15", "scraped_at": "2025-06-29T06:30:00Z", "why_fits": "Requires TypeScript, NextJS/React, SQL databases, cloud deployment - matches React, Node.js, and Vercel/Render deployment experience"}, {"id": "inlighnx_fullstack_001", "title": "Full Stack Development Intern", "company": "InLighnX Global Private Limited", "location": "Remote", "link": "https://in.linkedin.com/jobs/view/full-stack-development-intern-at-inlighnx-global-private-limited-4250363094", "platform": "linkedin", "posted_date": "2025-06-25", "scraped_at": "2025-06-29T06:30:00Z", "why_fits": "Requires React.js/Vue.js, Node.js/Express, MongoDB/MySQL/PostgreSQL - perfect match with full-stack tech stack"}, {"id": "kapidron_fullstack_001", "title": "Full Stack Developer Intern", "company": "Kapidron", "location": "Remote", "link": "https://in.linkedin.com/jobs/view/full-stack-developer-intern-at-kapidron-4227632437", "platform": "linkedin", "posted_date": "2025-06-20", "scraped_at": "2025-06-29T06:30:00Z", "why_fits": "Requires Next.js, React, React Native, AWS, Node.js - aligns with React, Node.js, and cloud deployment skills"}, {"id": "kaabil_node_001", "title": "Node Js Intern", "company": "Kaabil Finance Private Limited", "location": "Jaipur, Rajasthan, India", "link": "https://in.linkedin.com/jobs/view/node-js-intern-at-kaabil-finance-private-limited-4191533732", "platform": "linkedin", "posted_date": "2025-06-18", "scraped_at": "2025-06-29T06:30:00Z", "why_fits": "Requires JavaScript, Node.js, React Framework - matches Node.js/Express and React experience"}, {"id": "cypherock_fullstack_001", "title": "Full Stack Developer Intern", "company": "Cypherock", "location": "Ghaziabad, Uttar Pradesh, India", "link": "https://in.linkedin.com/jobs/view/full-stack-developer-intern-at-cypherock-3627620001", "platform": "linkedin", "posted_date": "2025-06-10", "scraped_at": "2025-06-29T06:30:00Z", "why_fits": "Requires MERN stack, DevOps on AWS - matches React, Node.js, and deployment experience"}, {"id": "bixso_ai_ml_001", "title": "Fresher/Intern AI/ML Engineering", "company": "BIXSO", "location": "Remote (Ho Chi Minh City, Vietnam)", "link": "https://vn.linkedin.com/jobs/view/fresher-intern-ai-ml-engineering-at-bixso-4202762762", "platform": "linkedin", "posted_date": "2025-06-22", "scraped_at": "2025-06-29T06:30:00Z", "why_fits": "Remote role focusing on AI applications with Python - matches AI/ML skills and Python proficiency"}, {"id": "stremly_ai_001", "title": "AI Software Developer Intern", "company": "Stremly", "location": "Remote", "link": "https://in.linkedin.com/jobs/view/ai-software-developer-intern-at-stremly-4189387176", "platform": "linkedin", "posted_date": "2025-06-12", "scraped_at": "2025-06-29T06:30:00Z", "why_fits": "Requires Python, AI frameworks, LLMs, FastAPI - aligns with AI integration via OpenRouter API and backend development skills"}, {"id": "05e05d27726043c4", "title": "Senior Independent AI Engineer / Architect", "company": "A.Team", "location": "Americas, Europe, Israel", "link": "https://remotive.com/remote-jobs/software-development/senior-independent-ai-engineer-architect-1919266", "platform": "remotive", "posted_date": "2026-06-16", "scraped_at": "2026-06-28T07:46:49.336932+00:00"}, {"id": "36facfd6c9486bb7", "title": "Frontend Developer", "company": "Quinncia Inc", "location": "Worldwide", "link": "https://remotive.com/remote-jobs/software-development/frontend-developer-2090991", "platform": "remotive", "posted_date": "2026-06-16", "scraped_at": "2026-06-28T07:46:49.336955+00:00"}, {"id": "3f27252385084bdc", "title": "Online Data Analyst Canada (French Language)", "company": "TELUS Digital", "location": "Canada", "link": "https://remotive.com/remote-jobs/all-others/online-data-analyst-canada-french-language-2090945", "platform": "remotive", "posted_date": "2026-06-04", "scraped_at": "2026-06-28T07:46:49.336976+00:00"}, {"id": "e48d96633045395b", "title": "Online Data Analyst United States Spanish speakers", "company": "TELUS Digital", "location": "USA", "link": "https://remotive.com/remote-jobs/all-others/online-data-analyst-united-states-spanish-speakers-2090946", "platform": "remotive", "posted_date": "2026-06-04", "scraped_at": "2026-06-28T07:46:49.336982+00:00"}, {"id": "e7dd7ce48677a480", "title": "Online Data Analyst Canada", "company": "TELUS Digital", "location": "Canada", "link": "https://remotive.com/remote-jobs/all-others/online-data-analyst-canada-2090944", "platform": "remotive", "posted_date": "2026-06-04", "scraped_at": "2026-06-28T07:46:49.336987+00:00"}];
 
         // Track which jobs are fulltime vs freelance
-        const FULLTIME_IDS = new Set([]);
+        const FULLTIME_IDS = new Set(["zeldin_ai_intern_001", "acelucid_trainee_001", "abstrabit_intern_001", "iterate_ai_fullstack_001", "inlighnx_fullstack_001", "kapidron_fullstack_001", "kaabil_node_001", "cypherock_fullstack_001", "bixso_ai_ml_001", "stremly_ai_001"]);
         const FREELANCE_IDS = new Set(["05e05d27726043c4", "36facfd6c9486bb7", "3f27252385084bdc", "e48d96633045395b", "e7dd7ce48677a480"]);
 
         // ─── DOM References ───────────────────────────────────────────
