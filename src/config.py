@@ -3,6 +3,7 @@ Centralized configuration for the Job Hunter pipeline.
 All target roles, locations, user-agents, and platform settings live here.
 """
 
+import os
 import random
 
 # ─── Target Roles ────────────────────────────────────────────────────────────
@@ -84,6 +85,8 @@ WHATSAPP_API_KEY = os.environ.get("WHATSAPP_API_KEY", "")
 WHATSAPP_CHANNEL_ID = os.environ.get("WHATSAPP_CHANNEL_ID", "")  # Hidden channel ID
 
 # ─── Application Tracking ─────────────────────────────────────────────────────
+DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
+DOCS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "docs")
 APPLICATION_STATUS_FILE = os.path.join(DATA_DIR, "application_status.json")
 
 # ─── Naukri URL patterns ────────────────────────────────────────────────────
@@ -144,12 +147,6 @@ def random_keystroke_delay() -> int:
     return random.randint(KEYSTROKE_DELAY_MIN, KEYSTROKE_DELAY_MAX)
 
 # ─── Data file paths ────────────────────────────────────────────────────────
-import os
-
-PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA_DIR = os.path.join(PROJECT_ROOT, "data")
-DOCS_DIR = os.path.join(PROJECT_ROOT, "docs")
-
 FULLTIME_JOBS_FILE = os.path.join(DATA_DIR, "fulltime_jobs.json")
 FREELANCE_JOBS_FILE = os.path.join(DATA_DIR, "freelance_jobs.json")
 JOBS_STATE_FILE = os.path.join(DATA_DIR, "jobs_state.json")

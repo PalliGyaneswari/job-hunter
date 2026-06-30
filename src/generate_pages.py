@@ -158,16 +158,15 @@ def generate_dashboard():
             align-items: center;
             gap: 6px;
             padding: 6px 16px;
-            background: var(--bg-glass);
-            border: 1px solid var(--border-glass);
+            background: #0d5c2d;
+            border: 1px solid #0a4a24;
             border-radius: 100px;
             font-size: 12px;
-            font-weight: 500;
-            color: var(--accent-emerald);
+            font-weight: 600;
+            color: #ffffff;
             text-transform: uppercase;
             letter-spacing: 1.5px;
             margin-bottom: 20px;
-            backdrop-filter: blur(10px);
         }}
 
         .header__badge::before {{
