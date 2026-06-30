@@ -48,5 +48,55 @@
     "platform": "remotive",
     "posted_date": "2026-06-04",
     "scraped_at": "2026-06-28T07:46:49.336987+00:00"
+  },
+  {
+    "id": "ad34855e3fa1c7b7",
+    "title": "Staff Software Engineer, Product (Belo Horizonte)",
+    "company": "LawnStarter",
+    "location": "Brazil",
+    "link": "https://remotive.com/remote-jobs/software-development/staff-software-engineer-product-belo-horizonte-2090910",
+    "platform": "remotive",
+    "posted_date": "2026-06-02",
+    "scraped_at": "2026-06-30T19:00:10.507247+00:00"
+  },
+  {
+    "id": "28933caead7c1261",
+    "title": "Staff Software Engineer, Product (Florianópolis)",
+    "company": "LawnStarter",
+    "location": "Brazil",
+    "link": "https://remotive.com/remote-jobs/software-development/staff-software-engineer-product-florianopolis-2090911",
+    "platform": "remotive",
+    "posted_date": "2026-06-02",
+    "scraped_at": "2026-06-30T19:00:10.507280+00:00"
+  },
+  {
+    "id": "667e1e3e6cdf9a52",
+    "title": "Staff Software Engineer, Product (Porto Alegre)",
+    "company": "LawnStarter",
+    "location": "Brazil",
+    "link": "https://remotive.com/remote-jobs/software-development/staff-software-engineer-product-porto-alegre-2090909",
+    "platform": "remotive",
+    "posted_date": "2026-06-02",
+    "scraped_at": "2026-06-30T19:00:10.507295+00:00"
+  },
+  {
+    "id": "963fbb282473495b",
+    "title": "Staff Software Engineer, Product (São Paulo)",
+    "company": "LawnStarter",
+    "location": "Brazil",
+    "link": "https://remotive.com/remote-jobs/software-development/staff-software-engineer-product-sao-paulo-2090912",
+    "platform": "remotive",
+    "posted_date": "2026-06-02",
+    "scraped_at": "2026-06-30T19:00:10.507311+00:00"
+  },
+  {
+    "id": "a589a86dcc33c475",
+    "title": "Staff Software Engineer, Product (Campinas)",
+    "company": "LawnStarter",
+    "location": "Brazil",
+    "link": "https://remotive.com/remote-jobs/software-development/staff-software-engineer-product-campinas-2090913",
+    "platform": "remotive",
+    "posted_date": "2026-06-02",
+    "scraped_at": "2026-06-30T19:00:10.507325+00:00"
   }
 ]
