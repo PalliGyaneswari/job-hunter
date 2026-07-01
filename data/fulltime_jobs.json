@@ -14,20 +14,6 @@
     "work_mode": "Remote"
   },
   {
-    "id": "educative_entry_001",
-    "title": "Software Engineer (Entry-level)",
-    "company": "Educative Inc",
-    "location": "Remote",
-    "link": "https://jobs.lever.co/educative/09b4532f-3645-41bf-8546-e05b3448b8a0/apply",
-    "platform": "lever",
-    "posted_date": "2025-06-30",
-    "scraped_at": "2025-06-30T10:15:00Z",
-    "why_fits": "Entry-level role, BS/MS/Ph.D. in CS, proficiency in Python/JavaScript/Typescript - matches software engineering background",
-    "accepting_applications": true,
-    "experience": "Entry-level",
-    "work_mode": "Remote"
-  },
-  {
     "id": "nirmata_intern_001",
     "title": "Software Engineer Intern, India",
     "company": "Nirmata",
