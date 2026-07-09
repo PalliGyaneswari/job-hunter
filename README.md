@@ -1,116 +1,181 @@
-# 🎯 Automated Daily Job Hunting Agent for Palli Gyaneswari
+# JobPulse 🚀
 
-A fully automated Python pipeline that runs daily via GitHub Actions. It scrapes Indian tech hubs and global remote platforms for AI/ML, Full Stack, and Software Engineer roles matching my profile — then compiles everything into a live dashboard on GitHub Pages.
+> **Personal AI/ML & Full Stack job aggregator dashboard** — built by a final-year CS student targeting AI Engineer, ML Engineer, and Full Stack Developer roles (fresher / 0–1 YOE). Pulls fresh listings every 24 hours from official job APIs, filters them against a target profile, and surfaces only what's new.
 
-## 👤 My Profile
+This is the single source-of-truth spec for the project. It supersedes two earlier, overlapping READMEs (`JobPulse` and `job-hunter`) — the scraping-based approach (LinkedIn/Naukri via Playwright) has been **dropped** in favor of the official-API approach below: it's more reliable, doesn't risk account bans or ToS violations, and doesn't depend on proxy infrastructure to stay working.
 
-- **Final-year B.Tech CS student** (graduating 2027), Raghu Engineering College, India
-- **Full-stack developer** (React, Node.js/Express, MySQL, JWT auth, Tailwind)
-- **Production projects:**
-  - Password K Vault — AI-powered password security platform (Node/React/MySQL, deployed on Vercel/Render/Railway, AI integration via OpenRouter API)
-  - Skill Synthex — ML career-prediction system (XGBoost, Random Forest, SVM, Logistic Regression, 99.67% accuracy)
-- **AI/ML internship experience** (classification modeling)
-- **Certifications:** Python/C/Java (NPTEL), MySQL (HackerRank), DSA (SmartInterviews)
-- **Experience level:** Fresher / 0-1 years (eligible for internships and entry-level/grad roles)
-- **LinkedIn:** [www.linkedin.com/in/palli-gyaneswari-32a7a02a2](https://www.linkedin.com/in/palli-gyaneswari-32a7a02a2)
+---
+
+## 👤 Target Profile (drives all filtering)
+
+- Final-year B.Tech CS student (graduating 2027), Raghu Engineering College — CGPA 9.15
+- Target roles: **AI Engineer, ML Engineer, Full Stack Developer, SE Intern**
+- Target locations: Bangalore, Hyderabad, Pune, Chennai, Vijayawada, Visakhapatnam, Dubai, USA, Remote
+- Priority companies (surfaced first): Microsoft, Amazon, Google, TCS, Infosys, Wipro, Freshworks, Razorpay
+- Experience level: fresher / 0–1 YOE — internships and entry-level/grad roles only
+- Production projects to reference: Password K Vault (deployed, Node/React/MySQL/OpenRouter), Skill Synthex (XGBoost/RF/SVM/LogReg, ~99.67% accuracy)
+
+---
 
 ## ✨ Features
 
-- **Multi-platform scraping** — LinkedIn, Naukri.com, and Remotive API
-- **Target roles** — AI Engineer, ML Engineer, Full Stack Developer, Software Engineer Intern
-- **Target locations (India)** — Visakhapatnam, Vijayawada, Hyderabad, Bengaluru, Chennai, Pune
-- **Global freelance tracking** — Remote contracts from the Remotive API
-- **Experience filtering** — Only fresher/0-1 years/intern/new grad roles
-- **Deduplication** — Historical job IDs tracked in `jobs_state.json` to prevent duplicates
-- **Anti-detection** — Human-like delays and user-agent rotation via Playwright
-- **Auto-deployed dashboard** — Responsive HTML updated daily at `https://<username>.github.io/job-hunter/`
+| Feature | Detail |
+|---|---|
+| **Multi-source ingestion** | Adzuna, JSearch (RapidAPI), Jooble, Arbeitnow, RemoteOK — all official/ToS-compliant, no scraping |
+| **24-hour auto-refresh** | Pipeline runs daily (node-cron in-app, or GitHub Actions as a free/redundant scheduler) and **must surface only newly-seen jobs** on each run |
+| **Fuzzy deduplication** | Levenshtein similarity dedup across sources so the same posting from two APIs doesn't show twice |
+| **Persistent seen-state** | Every ingested job ID is tracked so re-runs never re-show or lose track of a listing — this is what makes "different jobs every day" actually true instead of just re-fetching the same 15 |
+| **Role + location filter** | Matches against the target profile above |
+| **Priority + verified badges** | Priority companies surfaced first; gold ✓ badge for known company domains |
+| **Stale detection** | ⚠️ flag for listings > 30 days old |
+| **Application tracking** | Mark as Applied → persists even if the job later goes inactive |
+| **JWT auth** | Single-user login — private dashboard, not public |
+| **Ingestion log** | Collapsible table showing each run: source, count fetched, new vs duplicate, timestamp |
 
-## 📁 Project Structure
+---
+
+## �️ Project Structure
 
 ```
-job-hunter/
+jobpulse/
+├── backend/
+│   ├── server.js
+│   ├── .env.example
+│   ├── package.json
+│   └── src/
+│       ├── config/
+│       │   ├── db.js
+│       │   └── auth.js
+│       ├── db/
+│       │   ├── schema.sql
+│       │   ├── migrate.js
+│       │   └── seed.js
+│       ├── ingestion/
+│       │   ├── pipeline.js          # orchestrator — runs every 24h
+│       │   ├── normalizer.js        # source → canonical schema
+│       │   ├── deduplicator.js      # fuzzy dedup (Levenshtein)
+│       │   ├── filters.js           # role/location/priority/verified/stale
+│       │   └── sources/
+│       │       ├── adzuna.js
+│       │       ├── jsearch.js
+│       │       ├── jooble.js
+│       │       ├── arbeitnow.js
+│       │       └── remoteok.js
+│       ├── routes/
+│       │   ├── auth.js
+│       │   ├── jobs.js
+│       │   └── applications.js
+│       └── scheduler/
+│           └── cron.js              # node-cron, daily at 2 AM IST
 ├── .github/workflows/
-│   └── job_hunter.yml              # GitHub Actions cron workflow
-├── data/
-│   ├── fulltime_jobs.json          # India-based role listings
-│   ├── freelance_jobs.json         # Global freelance listings
-│   └── jobs_state.json             # Deduplication state tracker
-├── src/
-│   ├── __init__.py
-│   ├── config.py                   # Centralized configuration
-│   ├── scraper.py                  # Playwright + API scraping orchestration
-│   └── generate_pages.py          # JSON → static HTML compiler
-├── docs/
-│   └── index.html                  # Auto-generated dashboard (GitHub Pages root)
-├── gyane_fullstack_resume (2).pdf  # Resume
-├── requirements.txt                # Python dependencies
-└── README.md
+│   └── refresh.yml                  # optional: GitHub Actions as a free/redundant 24h trigger
+└── frontend/
+    ├── index.html
+    ├── vite.config.js
+    ├── tailwind.config.js
+    ├── package.json
+    └── src/
+        ├── main.jsx
+        ├── index.css                # vault ledger design system
+        ├── api/client.js
+        ├── contexts/AuthContext.jsx
+        ├── hooks/
+        │   ├── useJobs.js
+        │   └── useApplications.js
+        ├── pages/
+        │   ├── Login.jsx
+        │   └── Dashboard.jsx
+        └── components/
+            ├── ProtectedRoute.jsx
+            ├── StatsBar.jsx
+            ├── TabNav.jsx
+            ├── FilterBar.jsx
+            ├── JobCard.jsx
+            ├── Pagination.jsx
+            └── IngestionLog.jsx
 ```
+
+---
 
 ## 🛠️ Setup
 
 ### Prerequisites
+- Node.js 18+
+- MySQL 8+ (local or hosted on Railway)
+- API keys: Adzuna, JSearch (RapidAPI), Jooble (Arbeitnow + RemoteOK need no key)
 
-- Python 3.10+
-- Git
-- A GitHub account with a **private** repository
-
-### 1. Clone & Install
-
+### 1. Install
 ```bash
-git clone <your-private-repo-url>
-cd job-hunter
-pip install -r requirements.txt
-playwright install
+git clone https://github.com/<your-username>/jobpulse.git
+cd jobpulse/backend && npm install
+cd ../frontend && npm install
 ```
 
-### 2. Configure GitHub Secrets
-
-Go to your repo on GitHub → **Settings** → **Secrets and variables** → **Actions** → **New repository secret**:
-
-| Secret Name      | Value                        |
-|------------------|------------------------------|
-| `LINKEDIN_USER`  | Your LinkedIn login email    |
-| `LINKEDIN_PASS`  | Your LinkedIn login password |
-
-> [!WARNING]
-> Never hardcode credentials. The scraper reads them exclusively from environment variables.
-> Use a secondary LinkedIn account — scraping may trigger account restrictions.
-
-### 3. Enable GitHub Pages
-
-1. Go to **Settings** → **Pages**.
-2. Set **Source** to **Deploy from a branch**.
-3. Choose branch `main`, folder `/docs`, and click **Save**.
-
-The dashboard will auto-update every morning at **10:30 AM IST (05:00 UTC)** at:
-```
-https://<your-github-username>.github.io/job-hunter/
-```
-
-### 4. Run Manually (optional)
-
-To trigger a scrape locally instead of waiting for the cron schedule:
-
+### 2. Configure `.env` 
 ```bash
-export LINKEDIN_USER=""
-export LINKEDIN_PASS="your-password"
-python src/scraper.py
-python src/generate_pages.py
+cd jobpulse/backend
+cp .env.example .env
 ```
 
-You can also trigger the workflow manually from GitHub → **Actions** → **Daily Job Hunter** → **Run workflow**.
+| Variable | Where to get it |
+|---|---|
+| `DB_*` | Local MySQL or Railway credentials |
+| `JWT_SECRET` | `node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"` |
+| `ADMIN_USERNAME` / `ADMIN_PASSWORD_HASH` | `node -e "const b=require('bcryptjs');console.log(b.hashSync('YOUR_PASSWORD',12))"` |
+| `ADZUNA_APP_ID` / `ADZUNA_APP_KEY` | https://developer.adzuna.com/ |
+| `RAPIDAPI_KEY` | https://rapidapi.com/letscrape-6bRBa3QguO5/api/jsearch |
+| `JOOBLE_API_KEY` | Email api@jooble.org |
 
-## 🧰 Tech Stack
+### 3. Database
+```bash
+node src/db/migrate.js
+node src/db/seed.js   # 15 demo jobs so the dashboard isn't empty on first run
+```
 
-| Component        | Technology                     |
-|------------------|--------------------------------|
-| Scraping engine  | Playwright (Python)            |
-| Freelance API    | Remotive (public JSON API)     |
-| Automation       | GitHub Actions (daily cron)    |
-| Dashboard        | Static HTML / GitHub Pages     |
-| State management | JSON flat-file deduplication   |
+### 4. Run
+```bash
+# Terminal 1
+cd jobpulse/backend && npm run dev     # http://localhost:3001
+# Terminal 2
+cd jobpulse/frontend && npm run dev    # http://localhost:5173
+```
 
-## 📄 License
+---
 
-This project is for personal use. Please respect the terms of service of all scraped platforms.
+## ⏱️ 24-Hour Refresh — Requirements (non-negotiable for this project)
+
+1. `scheduler/cron.js` triggers `ingestion/pipeline.js` every 24h (`0 2 * * *`, IST).
+2. `pipeline.js` fetches from all 5 sources → `normalizer.js` → `deduplicator.js` → `filters.js`.
+3. The database UNIQUE constraint on (job_id, source) prevents duplicate job IDs from being inserted; already-seen jobs are updated (e.g. stale flag) but not re-flagged as new.
+4. Only genuinely new job IDs are inserted and marked "new" in the dashboard; already-seen jobs are updated (e.g. stale flag) but not re-flagged as new.
+5. `IngestionLog.jsx` shows fetched / new / duplicate counts per run so it's verifiable that each cycle actually surfaces different jobs, not a re-fetch of the same set.
+6. Optional redundancy: `.github/workflows/refresh.yml` can hit `POST /api/jobs/refresh` on the same schedule as a free backup trigger if the server sleeps (e.g. free-tier Render).
+
+---
+
+## 🌐 Deployment
+- **Frontend** → Vercel (`VITE_API_URL` env var pointing at backend)
+- **Backend** → Render or Railway
+- **MySQL** → Railway
+
+---
+
+## 📄 API Reference
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/auth/login` | Login → JWT |
+| `GET` | `/api/auth/me` | Verify token |
+| `GET` | `/api/jobs` | Paginated jobs (tab, category, location, search, page, limit) |
+| `GET` | `/api/jobs/stats` | Count per tab + breakdown |
+| `POST` | `/api/jobs/:id/apply` | Mark applied |
+| `DELETE` | `/api/jobs/:id/apply` | Un-apply |
+| `POST` | `/api/jobs/refresh` | Trigger pipeline manually |
+| `GET` | `/api/applications` | All applied jobs |
+| `GET` | `/api/applications/ingestion-log` | Recent ingestion runs |
+| `GET` | `/api/health` | Health check |
+
+---
+
+## 📄 License / Compliance Note
+Personal use. All job data is fetched via official, ToS-compliant APIs (Adzuna, JSearch, Jooble, Arbeitnow, RemoteOK). No LinkedIn or Naukri scraping — dropped intentionally to avoid account-ban risk and to avoid depending on proxy/rotation infrastructure to keep working.
