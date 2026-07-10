@@ -11,8 +11,6 @@ const morgan     = require('morgan');
 const rateLimit  = require('express-rate-limit');
 const path       = require('path');
 
-const authMiddleware    = require('./src/config/auth');
-const authRouter        = require('./src/routes/auth');
 const jobsRouter        = require('./src/routes/jobs');
 const applicationsRouter= require('./src/routes/applications');
 const { startScheduler } = require('./src/scheduler/cron');
@@ -49,13 +47,9 @@ const limiter = rateLimit({
 app.use('/api/', limiter);
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
-// Public: login only
-app.use('/api/auth', authRouter);
-
-// Protected: all other API routes require valid JWT
-app.use('/api/auth/me',        authMiddleware);
-app.use('/api/jobs',           authMiddleware, jobsRouter);
-app.use('/api/applications',   authMiddleware, applicationsRouter);
+// Public: no authentication required
+app.use('/api/jobs',           jobsRouter);
+app.use('/api/applications',   applicationsRouter);
 
 // ─── Health Check ─────────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {
