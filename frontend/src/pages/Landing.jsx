@@ -1,20 +1,29 @@
-import { useState } from 'react'
-import { Zap, ArrowRight, Briefcase, Target, TrendingUp } from 'lucide-react'
+import { useState, lazy, Suspense } from 'react'
+import { Zap, ArrowRight, Briefcase, Target, TrendingUp, Loader2 } from 'lucide-react'
+
+const Dashboard = lazy(() => import('./Dashboard'))
 
 export default function Landing() {
   const [showDashboard, setShowDashboard] = useState(false)
 
   if (showDashboard) {
-    const Dashboard = require('./Dashboard').default
-    return <Dashboard />
+    return (
+      <Suspense fallback={
+        <div className="min-h-screen vault-bg vault-grid flex items-center justify-center">
+          <Loader2 className="animate-spin text-vault-brass" size={48} />
+        </div>
+      }>
+        <Dashboard />
+      </Suspense>
+    )
   }
 
   return (
     <div className="min-h-screen vault-bg vault-grid relative overflow-hidden">
       {/* Floating orbs */}
-      <div className="orb w-96 h-96 bg-vault-brass" style={{ top: '-10%', right: '-10%' }} />
-      <div className="orb w-72 h-72 bg-vault-emerald" style={{ bottom: '10%', left: '-5%' }} />
-      <div className="orb w-48 h-48 bg-vault-purple/40" style={{ top: '50%', right: '20%' }} />
+      <div className="orb" style={{ top: '-10%', right: '-10%', width: '384px', height: '384px', background: 'rgba(201, 168, 76, 0.08)' }} />
+      <div className="orb" style={{ bottom: '10%', left: '-5%', width: '288px', height: '288px', background: 'rgba(16, 185, 129, 0.08)' }} />
+      <div className="orb" style={{ top: '50%', right: '20%', width: '192px', height: '192px', background: 'rgba(167, 139, 250, 0.08)' }} />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         {/* Header */}
@@ -51,7 +60,7 @@ export default function Landing() {
         {/* Features */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
           <div className="glass-card rounded-xl p-6">
-            <div className="w-12 h-12 rounded-lg bg-vault-emerald-dim/20 flex items-center justify-center mb-4">
+            <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4" style={{ background: 'rgba(16, 185, 129, 0.2)' }}>
               <Briefcase className="text-vault-emerald" size={24} />
             </div>
             <h3 className="text-lg font-semibold text-vault-text mb-2">Curated Jobs</h3>
@@ -61,7 +70,7 @@ export default function Landing() {
           </div>
 
           <div className="glass-card rounded-xl p-6">
-            <div className="w-12 h-12 rounded-lg bg-vault-brass-dim/20 flex items-center justify-center mb-4">
+            <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4" style={{ background: 'rgba(201, 168, 76, 0.2)' }}>
               <Target className="text-vault-brass" size={24} />
             </div>
             <h3 className="text-lg font-semibold text-vault-text mb-2">Smart Filtering</h3>
@@ -71,7 +80,7 @@ export default function Landing() {
           </div>
 
           <div className="glass-card rounded-xl p-6">
-            <div className="w-12 h-12 rounded-lg bg-vault-purple-dim/20 flex items-center justify-center mb-4">
+            <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4" style={{ background: 'rgba(167, 139, 250, 0.2)' }}>
               <TrendingUp className="text-vault-purple" size={24} />
             </div>
             <h3 className="text-lg font-semibold text-vault-text mb-2">Real-time Updates</h3>
