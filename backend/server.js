@@ -56,15 +56,6 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString(), env: process.env.NODE_ENV });
 });
 
-// ─── Serve React SPA in production ────────────────────────────────────────────
-if (process.env.NODE_ENV === 'production') {
-  const staticPath = path.join(__dirname, '../frontend/dist');
-  app.use(express.static(staticPath));
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(staticPath, 'index.html'));
-  });
-}
-
 // ─── Error Handler ────────────────────────────────────────────────────────────
 app.use((err, req, res, _next) => {
   console.error('[Server] Unhandled error:', err.message);
