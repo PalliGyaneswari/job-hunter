@@ -1,6 +1,7 @@
 const express  = require('express');
 const bcrypt   = require('bcryptjs');
 const jwt      = require('jsonwebtoken');
+const authMiddleware = require('../config/auth');
 const router   = express.Router();
 
 /**
@@ -52,7 +53,7 @@ router.post('/login', async (req, res) => {
  * GET /api/auth/me
  * Returns current user info (requires valid JWT — tested via middleware in server.js)
  */
-router.get('/me', (req, res) => {
+router.get('/me', authMiddleware, (req, res) => {
   res.json({ success: true, user: req.user });
 });
 

@@ -8,7 +8,8 @@ import Pagination  from '../components/Pagination'
 import IngestionLog from '../components/IngestionLog'
 import { useJobs }  from '../hooks/useJobs'
 import { useApplications } from '../hooks/useApplications'
-import { Zap, RefreshCw, BriefcaseIcon, Loader2 } from 'lucide-react'
+import { useAuth }  from '../contexts/AuthContext'
+import { Zap, RefreshCw, BriefcaseIcon, Loader2, LogOut } from 'lucide-react'
 
 const TABS = [
   { id: 'all',          label: 'All Jobs',          icon: '🌐' },
@@ -18,6 +19,7 @@ const TABS = [
 ]
 
 export default function Dashboard() {
+  const { logout } = useAuth()
   const [activeTab,  setActiveTab]  = useState('all')
   const [category,   setCategory]   = useState('')
   const [location,   setLocation]   = useState('')
@@ -100,6 +102,17 @@ export default function Dashboard() {
                 : <RefreshCw size={15} />
               }
               <span className="hidden sm:inline">Refresh</span>
+            </button>
+
+            {/* Logout */}
+            <button
+              id="dashboard-logout-btn"
+              onClick={logout}
+              title="Logout from dashboard"
+              className="flex items-center gap-2 px-3 py-2 rounded-lg bg-vault-card border border-vault-border text-vault-text-muted hover:text-vault-rose hover:border-vault-rose/40 transition-all text-sm font-medium"
+            >
+              <LogOut size={15} />
+              <span className="hidden sm:inline">Logout</span>
             </button>
           </div>
         </header>

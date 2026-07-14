@@ -79,8 +79,8 @@ router.get('/', async (req, res) => {
       ${whereClause}
     `;
 
-    const [rows]    = await db.execute(sql,      [...params, limit, offset]);
-    const [countRow]= await db.execute(countSql, params);
+    const [rows]    = await db.query(sql,      [...params, limit, offset]);
+    const [countRow]= await db.query(countSql, params);
     const total     = countRow[0]?.total || 0;
 
     res.json({

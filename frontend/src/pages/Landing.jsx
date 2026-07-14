@@ -1,22 +1,8 @@
-import { useState, lazy, Suspense } from 'react'
-import { Zap, ArrowRight, Briefcase, Target, TrendingUp, Loader2 } from 'lucide-react'
-
-const Dashboard = lazy(() => import('./Dashboard'))
+import { useNavigate } from 'react-router-dom'
+import { Zap, ArrowRight, Briefcase, Target, TrendingUp } from 'lucide-react'
 
 export default function Landing() {
-  const [showDashboard, setShowDashboard] = useState(false)
-
-  if (showDashboard) {
-    return (
-      <Suspense fallback={
-        <div className="min-h-screen vault-bg vault-grid flex items-center justify-center">
-          <Loader2 className="animate-spin text-vault-brass" size={48} />
-        </div>
-      }>
-        <Dashboard />
-      </Suspense>
-    )
-  }
+  const navigate = useNavigate()
 
   return (
     <div className="min-h-screen vault-bg vault-grid relative overflow-hidden">
@@ -49,7 +35,7 @@ export default function Landing() {
             Fresh jobs from top sources, filtered and prioritized for you.
           </p>
           <button
-            onClick={() => setShowDashboard(true)}
+            onClick={() => navigate('/dashboard')}
             className="inline-flex items-center gap-2 px-8 py-4 bg-brass-gradient text-vault-bg font-semibold rounded-xl hover:scale-105 transition-transform shadow-gold"
           >
             Get Started

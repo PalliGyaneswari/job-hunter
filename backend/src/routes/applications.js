@@ -30,7 +30,7 @@ router.get('/', async (req, res) => {
 router.get('/ingestion-log', async (req, res) => {
   try {
     const limit = Math.min(50, parseInt(req.query.limit || '20'));
-    const [rows] = await db.execute(
+    const [rows] = await db.query(
       `SELECT * FROM ingestion_log ORDER BY run_at DESC LIMIT ?`,
       [limit]
     );
