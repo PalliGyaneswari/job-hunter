@@ -25,13 +25,29 @@ app.use(helmet({
   contentSecurityPolicy: false, // Disabled — SPA handles its own CSP
 }));
 
-const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:5173').split(',');
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+app.use(cors((req, callback) => {
+  const origin = req.header('Origin');
+  const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:5173').split(',');
+  
+  let isAllowed = false;
+  if (!origin) {
+    isAllowed = true;
+  } else if (allowedOrigins.includes(origin)) {
+    isAllowed = true;
+  } else {
+    try {
+      const originHost = new URL(origin).host;
+      if (originHost === req.headers.host) {
+        isAllowed = true;
+      }
+    } catch (_) {}
+  }
+
+  if (isAllowed) {
+    callback(null, { origin: true, credentials: true });
+  } else {
     callback(new Error(`CORS blocked: ${origin}`));
-  },
-  credentials: true,
+  }
 }));
 
 app.use(express.json({ limit: '10kb' }));
