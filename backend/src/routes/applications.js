@@ -6,7 +6,7 @@ const router  = express.Router();
 // All applied jobs, including those closed by employer
 router.get('/', async (req, res) => {
   try {
-    const [rows] = await db.execute(`
+    const [rows] = await db.query(`
       SELECT
         j.*,
         a.id           AS applied_id,

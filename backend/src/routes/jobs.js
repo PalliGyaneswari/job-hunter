@@ -101,16 +101,16 @@ router.get('/', async (req, res) => {
 // Returns counts for each tab + category breakdown
 router.get('/stats', async (req, res) => {
   try {
-    const [[{ total_active }]]   = await db.execute('SELECT COUNT(*) AS total_active FROM jobs WHERE is_active = 1');
-    const [[{ total_priority }]] = await db.execute('SELECT COUNT(*) AS total_priority FROM jobs WHERE is_active = 1 AND is_priority = 1');
-    const [[{ total_closed }]]   = await db.execute('SELECT COUNT(*) AS total_closed FROM jobs WHERE is_active = 0');
-    const [[{ total_applied }]]  = await db.execute('SELECT COUNT(*) AS total_applied FROM applications');
+    const [[{ total_active }]]   = await db.query('SELECT COUNT(*) AS total_active FROM jobs WHERE is_active = 1');
+    const [[{ total_priority }]] = await db.query('SELECT COUNT(*) AS total_priority FROM jobs WHERE is_active = 1 AND is_priority = 1');
+    const [[{ total_closed }]]   = await db.query('SELECT COUNT(*) AS total_closed FROM jobs WHERE is_active = 0');
+    const [[{ total_applied }]]  = await db.query('SELECT COUNT(*) AS total_applied FROM applications');
 
-    const [catRows] = await db.execute(
+    const [catRows] = await db.query(
       'SELECT role_category, COUNT(*) AS count FROM jobs WHERE is_active = 1 GROUP BY role_category ORDER BY count DESC'
     );
 
-    const [srcRows] = await db.execute(
+    const [srcRows] = await db.query(
       'SELECT source, COUNT(*) AS count FROM jobs WHERE is_active = 1 GROUP BY source ORDER BY count DESC'
     );
 
@@ -139,12 +139,12 @@ router.post('/:id/apply', async (req, res) => {
     const notes = req.body.notes || null;
 
     // Verify job exists
-    const [[job]] = await db.execute('SELECT id FROM jobs WHERE id = ?', [jobId]);
+    const [[job]] = await db.query('SELECT id FROM jobs WHERE id = ?', [jobId]);
     if (!job) {
       return res.status(404).json({ success: false, message: 'Job not found.' });
     }
 
-    await db.execute(
+    await db.query(
       `INSERT INTO applications (job_id, notes)
        VALUES (?, ?)
        ON DUPLICATE KEY UPDATE notes = VALUES(notes), applied_date = applied_date`,
@@ -163,7 +163,7 @@ router.post('/:id/apply', async (req, res) => {
 router.delete('/:id/apply', async (req, res) => {
   try {
     const jobId = parseInt(req.params.id);
-    await db.execute('DELETE FROM applications WHERE job_id = ?', [jobId]);
+    await db.query('DELETE FROM applications WHERE job_id = ?', [jobId]);
     res.json({ success: true, message: 'Application removed.' });
   } catch (err) {
     console.error('[Jobs] DELETE apply error:', err);

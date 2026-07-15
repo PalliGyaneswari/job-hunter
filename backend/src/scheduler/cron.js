@@ -29,7 +29,7 @@ function startScheduler() {
       await runPipeline();
 
       // 2. Sync closed_by_employer: if a job in applications is now inactive, flag it
-      await db.execute(`
+      await db.query(`
         UPDATE applications a
         JOIN jobs j ON j.id = a.job_id
         SET a.closed_by_employer = 1

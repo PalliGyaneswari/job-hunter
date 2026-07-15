@@ -13,8 +13,6 @@ const path       = require('path');
 
 const jobsRouter        = require('./src/routes/jobs');
 const applicationsRouter= require('./src/routes/applications');
-const authRouter        = require('./src/routes/auth');
-const authMiddleware    = require('./src/config/auth');
 const { startScheduler } = require('./src/scheduler/cron');
 
 const app  = express();
@@ -66,26 +64,14 @@ const limiter = rateLimit({
 app.use('/api/', limiter);
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
-app.use('/api/auth',           authRouter);
-app.use('/api/jobs',           authMiddleware, jobsRouter);
-app.use('/api/applications',   authMiddleware, applicationsRouter);
+// Public: no authentication required
+app.use('/api/jobs',           jobsRouter);
+app.use('/api/applications',   applicationsRouter);
 
 // ─── Health Check ─────────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString(), env: process.env.NODE_ENV });
 });
-
-// Serve static React files in production
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../frontend/dist')));
-
-  app.get('*', (req, res, next) => {
-    if (req.path.startsWith('/api/')) {
-      return next();
-    }
-    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
-  });
-}
 
 // ─── Error Handler ────────────────────────────────────────────────────────────
 app.use((err, req, res, _next) => {
