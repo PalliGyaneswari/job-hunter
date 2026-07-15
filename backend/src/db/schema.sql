@@ -1,13 +1,9 @@
 -- ═══════════════════════════════════════════════════════════════════════════
 -- JobPulse Database Schema
--- Run: mysql -u root -p < src/db/schema.sql
+-- Run: mysql -h hayabusa.proxy.rlwy.net -P 13739 -u root -p railway < src/db/schema.sql
 -- ═══════════════════════════════════════════════════════════════════════════
 
-CREATE DATABASE IF NOT EXISTS jobpulse_db
-  CHARACTER SET utf8mb4
-  COLLATE utf8mb4_unicode_ci;
-
-USE jobpulse_db;
+USE railway;
 
 -- ─── Jobs Table ─────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS jobs (
