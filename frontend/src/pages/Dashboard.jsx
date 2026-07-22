@@ -9,7 +9,7 @@ import IngestionLog from '../components/IngestionLog'
 import { useJobs }  from '../hooks/useJobs'
 import { useApplications } from '../hooks/useApplications'
 import { useAuth }  from '../contexts/AuthContext'
-import { Zap, RefreshCw, BriefcaseIcon, Loader2, LogOut } from 'lucide-react'
+import { Zap, RefreshCw, BriefcaseIcon, Loader2, LogOut, Flame, Info } from 'lucide-react'
 
 const TABS = [
   { id: 'all',          label: 'All Jobs',          icon: '🌐' },
@@ -127,6 +127,51 @@ export default function Dashboard() {
             >
               View log →
             </button>
+          </div>
+        )}
+
+        {/* ─── Daily Cron / New Jobs Status Banner ────────────────────────────── */}
+        {stats && (
+          <div className={`mb-6 p-4 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-fade-in ${
+            stats.total_new_today > 0
+              ? 'bg-gradient-to-r from-amber-500/15 via-vault-brass/10 to-transparent border-amber-500/30 shadow-[0_0_25px_rgba(245,158,11,0.12)]'
+              : 'bg-vault-card/60 border-vault-border/80'
+          }`}>
+            <div className="flex items-center gap-3">
+              <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                stats.total_new_today > 0
+                  ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                  : 'bg-vault-border/30 text-vault-text-dim'
+              }`}>
+                {stats.total_new_today > 0 ? <Flame size={20} className="animate-pulse" /> : <Info size={18} />}
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h2 className="font-bold text-sm text-vault-text tracking-wide">
+                    {stats.total_new_today > 0 ? (
+                      <span className="text-amber-400">🔥 New on the block: {stats.total_new_today} new job{stats.total_new_today > 1 ? 's' : ''} posted today!</span>
+                    ) : (
+                      <span className="text-vault-text-muted">No new jobs posted today</span>
+                    )}
+                  </h2>
+                  {stats.total_new_today > 0 && (
+                    <span className="px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300">
+                      Fresh Today
+                    </span>
+                  )}
+                </div>
+                <p className="text-xs text-vault-text-dim mt-0.5">
+                  {stats.total_new_today > 0
+                    ? 'The daily cron run ingested fresh opportunities for you overnight.'
+                    : 'The daily cron runs automatically at 2:00 AM IST. Check back after the next run or click Refresh.'}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 text-xs mono text-vault-text-dim bg-vault-bg/40 px-3 py-1.5 rounded-lg border border-vault-border/40 self-start sm:self-center">
+              <span className="w-2 h-2 rounded-full bg-vault-emerald inline-block" />
+              <span>Daily Cron Active</span>
+            </div>
           </div>
         )}
 

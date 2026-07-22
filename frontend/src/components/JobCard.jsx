@@ -3,7 +3,7 @@ import { useApplyJob, useUnapplyJob } from '../hooks/useJobs'
 import {
   MapPin, Calendar, ExternalLink, CheckCircle2, Star,
   ShieldCheck, AlertTriangle, XCircle, Building2, Tag,
-  Loader2
+  Loader2, Flame
 } from 'lucide-react'
 
 const CATEGORY_STYLES = {
@@ -36,11 +36,22 @@ function formatDate(dateStr) {
   return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
 }
 
+function isPostedToday(postedDate, createdAt) {
+  const checkDate = (dStr) => {
+    if (!dStr) return false
+    const d = new Date(dStr)
+    const now = new Date()
+    return d.toDateString() === now.toDateString()
+  }
+  return checkDate(postedDate) || checkDate(createdAt)
+}
+
 export default function JobCard({ job, showAppliedStatus = false }) {
   const applyMut   = useApplyJob()
   const unapplyMut = useUnapplyJob()
   const isApplied  = !!job.applied_id
   const isLoading  = applyMut.isPending || unapplyMut.isPending
+  const isNewToday = isPostedToday(job.posted_date, job.created_at)
 
   const catStyle = CATEGORY_STYLES[job.role_category] || CATEGORY_STYLES['Other']
   const src      = SOURCE_LABELS[job.source] || { label: job.source, color: 'text-vault-text-dim' }
@@ -68,6 +79,14 @@ export default function JobCard({ job, showAppliedStatus = false }) {
           <Tag size={9} />
           {job.role_category}
         </span>
+
+        {/* New on the block */}
+        {isNewToday && (
+          <span className="badge bg-amber-500/20 border border-amber-500/40 text-amber-300 font-bold shadow-[0_0_10px_rgba(245,158,11,0.2)] animate-pulse">
+            <Flame size={9} />
+            New on the block
+          </span>
+        )}
 
         {/* Priority */}
         {job.is_priority === 1 && (

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { BriefcaseIcon, Star, CheckCircle2, XCircle } from 'lucide-react'
+import { BriefcaseIcon, Star, Flame, CheckCircle2, XCircle } from 'lucide-react'
 
 function AnimatedNumber({ value = 0 }) {
   const ref = useRef(null)
@@ -44,6 +44,14 @@ const STAT_CARDS = [
     accent:'bg-vault-gold/10 border-vault-gold/20',
   },
   {
+    key:   'total_new_today',
+    label: 'New On The Block',
+    icon:  Flame,
+    color: 'text-amber-400',
+    glow:  'shadow-[0_0_20px_rgba(251,191,36,0.2)]',
+    accent:'bg-amber-500/10 border-amber-500/30',
+  },
+  {
     key:   'total_applied',
     label: 'Applications',
     icon:  CheckCircle2,
@@ -64,7 +72,7 @@ const STAT_CARDS = [
 export default function StatsBar({ stats }) {
   if (!stats) {
     return (
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-6">
         {STAT_CARDS.map(c => (
           <div key={c.key} className="glass-card rounded-xl p-4 border border-vault-border">
             <div className="skeleton h-8 w-16 mb-2" />
@@ -76,7 +84,7 @@ export default function StatsBar({ stats }) {
   }
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-6">
       {STAT_CARDS.map(({ key, label, icon: Icon, color, glow, accent }) => (
         <div
           key={key}

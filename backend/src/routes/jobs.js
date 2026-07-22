@@ -105,6 +105,7 @@ router.get('/stats', async (req, res) => {
   try {
     const [[{ total_active }]]   = await db.query('SELECT COUNT(*) AS total_active FROM jobs WHERE is_active = 1');
     const [[{ total_priority }]] = await db.query('SELECT COUNT(*) AS total_priority FROM jobs WHERE is_active = 1 AND is_priority = 1');
+    const [[{ total_new_today }]] = await db.query('SELECT COUNT(*) AS total_new_today FROM jobs WHERE is_active = 1 AND (DATE(created_at) = CURDATE() OR posted_date = CURDATE())');
     const [[{ total_closed }]]   = await db.query('SELECT COUNT(*) AS total_closed FROM jobs WHERE is_active = 0');
     const [[{ total_applied }]]  = await db.query('SELECT COUNT(*) AS total_applied FROM applications');
 
@@ -121,6 +122,7 @@ router.get('/stats', async (req, res) => {
       stats: {
         total_active,
         total_priority,
+        total_new_today: total_new_today || 0,
         total_closed,
         total_applied,
         by_category: catRows,
