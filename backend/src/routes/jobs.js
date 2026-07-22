@@ -93,7 +93,9 @@ router.get('/', async (req, res) => {
     });
   } catch (err) {
     console.error('[Jobs] GET /api/jobs error:', err);
-    res.status(500).json({ success: false, message: 'Failed to fetch jobs.' });
+    console.error('[Jobs] Error details:', err.message);
+    console.error('[Jobs] Error stack:', err.stack);
+    res.status(500).json({ success: false, message: 'Failed to fetch jobs.', error: err.message });
   }
 });
 
@@ -127,7 +129,9 @@ router.get('/stats', async (req, res) => {
     });
   } catch (err) {
     console.error('[Jobs] GET /api/jobs/stats error:', err);
-    res.status(500).json({ success: false, message: 'Failed to fetch stats.' });
+    console.error('[Jobs] Stats error details:', err.message);
+    console.error('[Jobs] Stats error stack:', err.stack);
+    res.status(500).json({ success: false, message: 'Failed to fetch stats.', error: err.message });
   }
 });
 
